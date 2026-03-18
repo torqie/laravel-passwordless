@@ -10,16 +10,11 @@ class LaravelPasswordlessServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package
             ->name('laravel-passwordless')
-            ->hasConfigFile()
+            ->hasConfigFile('passwordless')
             ->hasViews()
-            ->hasMigration('create_laravel_passwordless_table')
+            ->hasMigration('create_passwordless_table')
             ->hasCommand(LaravelPasswordlessCommand::class);
     }
 }
