@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "wiredrhino/laravel-passwordless",
+    "description": "Passwordless authentication for Laravel with magic links and login codes",
     "keywords": [
-        ":vendor_name",
+        "wiredrhino",
         "laravel",
-        ":package_slug"
+        "laravel-passwordless"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/wiredrhino/laravel-passwordless",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Terik Hone",
+            "email": "terikhone@gmail.com",
             "role": "Developer"
         }
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Wiredrhino\\LaravelPasswordless\\": "src/",
+            "Wiredrhino\\LaravelPasswordless\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Wiredrhino\\LaravelPasswordless\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Wiredrhino\\LaravelPasswordless\\LaravelPasswordlessServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelPasswordless": "Wiredrhino\\LaravelPasswordless\\Facades\\LaravelPasswordless"
             }
         }
     },
