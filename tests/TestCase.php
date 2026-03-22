@@ -1,13 +1,13 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Tests;
+namespace Torqie\LaravelPasswordless\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Wiredrhino\LaravelPasswordless\LaravelPasswordlessServiceProvider;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\LaravelPasswordlessServiceProvider;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 class TestCase extends Orchestra
 {

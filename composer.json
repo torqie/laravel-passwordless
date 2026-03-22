@@ -1,12 +1,12 @@
 {
-    "name": "wiredrhino/laravel-passwordless",
+    "name": "torqie/laravel-passwordless",
     "description": "Passwordless authentication for Laravel with magic links and login codes",
     "keywords": [
-        "wiredrhino",
+        "torqie",
         "laravel",
         "laravel-passwordless"
     ],
-    "homepage": "https://github.com/wiredrhino/laravel-passwordless",
+    "homepage": "https://github.com/torqie/laravel-passwordless",
     "license": "MIT",
     "authors": [
         {
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Wiredrhino\\LaravelPasswordless\\": "src/",
-            "Wiredrhino\\LaravelPasswordless\\Database\\Factories\\": "database/factories/"
+            "Torqie\\LaravelPasswordless\\": "src/",
+            "Torqie\\LaravelPasswordless\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Wiredrhino\\LaravelPasswordless\\Tests\\": "tests/",
+            "Torqie\\LaravelPasswordless\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Wiredrhino\\LaravelPasswordless\\LaravelPasswordlessServiceProvider"
+                "Torqie\\LaravelPasswordless\\LaravelPasswordlessServiceProvider"
             ],
             "aliases": {
-                "LaravelPasswordless": "Wiredrhino\\LaravelPasswordless\\Facades\\LaravelPasswordless"
+                "LaravelPasswordless": "Torqie\\LaravelPasswordless\\Facades\\LaravelPasswordless"
             }
         }
     },

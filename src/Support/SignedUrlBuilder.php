@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Support;
+namespace Torqie\LaravelPasswordless\Support;
 
 use Illuminate\Support\Facades\URL;
 

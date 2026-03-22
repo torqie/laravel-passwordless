@@ -13,7 +13,7 @@ parameters:
 			path: config/passwordless.php
 
 		-
-			message: '#^Trait Wiredrhino\\LaravelPasswordless\\Traits\\HasPasswordlessAuth is used zero times and is not analysed\.$#'
+			message: '#^Trait Torqie\\LaravelPasswordless\\Traits\\HasPasswordlessAuth is used zero times and is not analysed\.$#'
 			identifier: trait.unused
 			count: 1
 			path: src/Traits/HasPasswordlessAuth.php

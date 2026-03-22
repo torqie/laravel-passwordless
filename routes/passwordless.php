@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Wiredrhino\LaravelPasswordless\Http\Controllers\LoginCodeController;
-use Wiredrhino\LaravelPasswordless\Http\Controllers\MagicLinkController;
+use Torqie\LaravelPasswordless\Http\Controllers\LoginCodeController;
+use Torqie\LaravelPasswordless\Http\Controllers\MagicLinkController;
 
 $prefix     = config('passwordless.routes.prefix', 'auth');
 $middleware = config('passwordless.routes.middleware', ['web']);

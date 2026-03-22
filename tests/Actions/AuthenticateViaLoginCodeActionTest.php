@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
-use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
-use Wiredrhino\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
+use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
     $this->user   = User::create(['email' => 'test@example.com']);

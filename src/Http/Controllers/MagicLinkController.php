@@ -1,17 +1,17 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Http\Controllers;
+namespace Torqie\LaravelPasswordless\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
-use Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction;
-use Wiredrhino\LaravelPasswordless\Actions\ResolveUserForSendAction;
-use Wiredrhino\LaravelPasswordless\Events\MagicLinkSent;
-use Wiredrhino\LaravelPasswordless\Notifications\MagicLinkNotification;
+use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
+use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
+use Torqie\LaravelPasswordless\Events\MagicLinkSent;
+use Torqie\LaravelPasswordless\Notifications\MagicLinkNotification;
 
 class MagicLinkController extends Controller
 {

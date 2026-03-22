@@ -14,7 +14,7 @@ Please be respectful and considerate in all interactions. We follow the [Contrib
 
 Before opening a bug report, please:
 
-1. Search [existing issues](https://github.com/wiredrhino/laravel-passwordless/issues) to avoid duplicates.
+1. Search [existing issues](https://github.com/torqie/laravel-passwordless/issues) to avoid duplicates.
 2. Reproduce the issue on the **latest** version of the package.
 
 When filing a bug report, include:
@@ -28,7 +28,7 @@ When filing a bug report, include:
 
 ## Suggesting Features
 
-Open a [GitHub Discussion](https://github.com/wiredrhino/laravel-passwordless/discussions) or issue with the `enhancement` label. Describe:
+Open a [GitHub Discussion](https://github.com/torqie/laravel-passwordless/discussions) or issue with the `enhancement` label. Describe:
 
 - The problem you're trying to solve
 - Your proposed solution or API
@@ -41,7 +41,7 @@ Open a [GitHub Discussion](https://github.com/wiredrhino/laravel-passwordless/di
 ### 1. Fork & branch
 
 ```bash
-git clone https://github.com/wiredrhino/laravel-passwordless.git
+git clone https://github.com/torqie/laravel-passwordless.git
 cd laravel-passwordless
 git checkout -b feat/my-feature
 ```

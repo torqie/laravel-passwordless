@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Notifications;
+namespace Torqie\LaravelPasswordless\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;

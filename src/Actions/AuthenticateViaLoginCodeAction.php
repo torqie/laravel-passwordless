@@ -1,15 +1,15 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Actions;
+namespace Torqie\LaravelPasswordless\Actions;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Wiredrhino\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
-use Wiredrhino\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
+use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 
 class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
 {

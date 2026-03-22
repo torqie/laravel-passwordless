@@ -1,9 +1,9 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Commands;
+namespace Torqie\LaravelPasswordless\Commands;
 
 use Illuminate\Console\Command;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 
 class PurgePasswordlessTokensCommand extends Command
 {

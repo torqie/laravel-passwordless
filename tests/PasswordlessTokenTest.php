@@ -1,7 +1,7 @@
 <?php
 
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 // -------------------------------------------------------------------------
 // Helpers

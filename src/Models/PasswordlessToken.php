@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Models;
+namespace Torqie\LaravelPasswordless\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +19,7 @@ use Illuminate\Support\Carbon;
  */
 class PasswordlessToken extends Model
 {
-    /** @use HasFactory<\Wiredrhino\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory> */
+    /** @use HasFactory<\Torqie\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory> */
     use HasFactory;
     protected $fillable = [
         'authenticatable_type',

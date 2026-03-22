@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Actions;
+namespace Torqie\LaravelPasswordless\Actions;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\RateLimiter;

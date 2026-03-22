@@ -1,14 +1,14 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Facades;
+namespace Torqie\LaravelPasswordless\Facades;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Wiredrhino\LaravelPasswordless\LaravelPasswordless
+ * @see \Torqie\LaravelPasswordless\LaravelPasswordless
  *
- * @method static \Wiredrhino\LaravelPasswordless\LaravelPasswordless for(Authenticatable $user)
+ * @method static \Torqie\LaravelPasswordless\LaravelPasswordless for(Authenticatable $user)
  * @method static string sendMagicLink()
  * @method static string sendLoginCode()
  */
@@ -16,6 +16,6 @@ class LaravelPasswordless extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Wiredrhino\LaravelPasswordless\LaravelPasswordless::class;
+        return \Torqie\LaravelPasswordless\LaravelPasswordless::class;
     }
 }

@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
-use Wiredrhino\LaravelPasswordless\Events\LoginCodeSent;
-use Wiredrhino\LaravelPasswordless\Events\MagicLinkSent;
-use Wiredrhino\LaravelPasswordless\Facades\LaravelPasswordless;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Notifications\LoginCodeNotification;
-use Wiredrhino\LaravelPasswordless\Notifications\MagicLinkNotification;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Events\LoginCodeSent;
+use Torqie\LaravelPasswordless\Events\MagicLinkSent;
+use Torqie\LaravelPasswordless\Facades\LaravelPasswordless;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Notifications\LoginCodeNotification;
+use Torqie\LaravelPasswordless\Notifications\MagicLinkNotification;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
     $this->user = User::create(['email' => 'fluent@example.com']);

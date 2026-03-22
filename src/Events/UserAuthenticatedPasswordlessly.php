@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Events;
+namespace Torqie\LaravelPasswordless\Events;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 

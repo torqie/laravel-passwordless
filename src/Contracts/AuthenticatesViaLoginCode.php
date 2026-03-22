@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Contracts;
+namespace Torqie\LaravelPasswordless\Contracts;
 
 use Illuminate\Http\RedirectResponse;
 

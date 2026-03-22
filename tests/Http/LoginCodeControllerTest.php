@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
-use Wiredrhino\LaravelPasswordless\Events\LoginCodeSent;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Notifications\LoginCodeNotification;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Events\LoginCodeSent;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Notifications\LoginCodeNotification;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
     $this->user = User::create(['email' => 'code@example.com']);

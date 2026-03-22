@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Database\Factories;
+namespace Torqie\LaravelPasswordless\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

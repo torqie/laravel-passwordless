@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
-use Wiredrhino\LaravelPasswordless\Events\MagicLinkSent;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Notifications\MagicLinkNotification;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Events\MagicLinkSent;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Notifications\MagicLinkNotification;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
     $this->user = User::create(['email' => 'magic@example.com']);
@@ -76,7 +76,7 @@ it('fails validation for an invalid email format', function () {
 // -------------------------------------------------------------------------
 
 it('authenticates the user via a valid signed URL and redirects to after_login', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     $this->get($url)
@@ -86,7 +86,7 @@ it('authenticates the user via a valid signed URL and redirects to after_login',
 });
 
 it('marks the token as used after a successful click-through', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     $this->get($url);
@@ -95,7 +95,7 @@ it('marks the token as used after a successful click-through', function () {
 });
 
 it('redirects to invalid_token when the signature is tampered with', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     // Tamper with the signature
@@ -106,7 +106,7 @@ it('redirects to invalid_token when the signature is tampered with', function ()
 });
 
 it('redirects to invalid_token when the token has already been used', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     // First click — marks token as used

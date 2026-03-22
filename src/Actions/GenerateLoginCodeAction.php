@@ -1,11 +1,11 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Actions;
+namespace Torqie\LaravelPasswordless\Actions;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Wiredrhino\LaravelPasswordless\Contracts\GeneratesLoginCode;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Support\TokenGenerator;
+use Torqie\LaravelPasswordless\Contracts\GeneratesLoginCode;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Support\TokenGenerator;
 
 class GenerateLoginCodeAction implements GeneratesLoginCode
 {

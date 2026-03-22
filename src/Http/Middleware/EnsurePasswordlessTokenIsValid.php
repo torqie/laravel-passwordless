@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Http\Middleware;
+namespace Torqie\LaravelPasswordless\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

@@ -1,20 +1,20 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless;
+namespace Torqie\LaravelPasswordless;
 
 use Illuminate\Routing\Router;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
-use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
-use Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction;
-use Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction;
-use Wiredrhino\LaravelPasswordless\Commands\PurgePasswordlessTokensCommand;
-use Wiredrhino\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
-use Wiredrhino\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
-use Wiredrhino\LaravelPasswordless\Contracts\GeneratesLoginCode;
-use Wiredrhino\LaravelPasswordless\Contracts\GeneratesMagicLink;
-use Wiredrhino\LaravelPasswordless\Http\Middleware\EnsurePasswordlessTokenIsValid;
+use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
+use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
+use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
+use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Torqie\LaravelPasswordless\Commands\PurgePasswordlessTokensCommand;
+use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
+use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
+use Torqie\LaravelPasswordless\Contracts\GeneratesLoginCode;
+use Torqie\LaravelPasswordless\Contracts\GeneratesMagicLink;
+use Torqie\LaravelPasswordless\Http\Middleware\EnsurePasswordlessTokenIsValid;
 
 class LaravelPasswordlessServiceProvider extends PackageServiceProvider
 {

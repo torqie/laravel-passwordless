@@ -1,12 +1,12 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Actions;
+namespace Torqie\LaravelPasswordless\Actions;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Wiredrhino\LaravelPasswordless\Contracts\GeneratesMagicLink;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Support\SignedUrlBuilder;
-use Wiredrhino\LaravelPasswordless\Support\TokenGenerator;
+use Torqie\LaravelPasswordless\Contracts\GeneratesMagicLink;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Support\SignedUrlBuilder;
+use Torqie\LaravelPasswordless\Support\TokenGenerator;
 
 class GenerateMagicLinkAction implements GeneratesMagicLink
 {

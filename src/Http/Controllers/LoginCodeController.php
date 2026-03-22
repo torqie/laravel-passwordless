@@ -1,17 +1,17 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Http\Controllers;
+namespace Torqie\LaravelPasswordless\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
-use Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction;
-use Wiredrhino\LaravelPasswordless\Actions\ResolveUserForSendAction;
-use Wiredrhino\LaravelPasswordless\Events\LoginCodeSent;
-use Wiredrhino\LaravelPasswordless\Notifications\LoginCodeNotification;
+use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
+use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
+use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
+use Torqie\LaravelPasswordless\Events\LoginCodeSent;
+use Torqie\LaravelPasswordless\Notifications\LoginCodeNotification;
 
 class LoginCodeController extends Controller
 {

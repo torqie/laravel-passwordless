@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\URL;
-use Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
     $this->user   = User::create(['email' => 'test@example.com']);

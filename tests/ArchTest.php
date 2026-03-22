@@ -5,32 +5,32 @@ arch('it will not use debugging functions')
     ->each->not->toBeUsed();
 
 arch('all action classes exist and are concrete classes')
-    ->expect('Wiredrhino\LaravelPasswordless\Actions')
+    ->expect('Torqie\LaravelPasswordless\Actions')
     ->classes()
     ->toBeClasses();
 
 arch('models extend Eloquent Model')
-    ->expect('Wiredrhino\LaravelPasswordless\Models')
+    ->expect('Torqie\LaravelPasswordless\Models')
     ->toExtend(\Illuminate\Database\Eloquent\Model::class);
 
 arch('controllers extend the base controller')
-    ->expect('Wiredrhino\LaravelPasswordless\Http\Controllers')
+    ->expect('Torqie\LaravelPasswordless\Http\Controllers')
     ->toExtend(\Illuminate\Routing\Controller::class);
 
 arch('notifications extend the base notification')
-    ->expect('Wiredrhino\LaravelPasswordless\Notifications')
+    ->expect('Torqie\LaravelPasswordless\Notifications')
     ->toExtend(\Illuminate\Notifications\Notification::class);
 
 arch('events are plain data classes with no side-effects')
-    ->expect('Wiredrhino\LaravelPasswordless\Events')
+    ->expect('Torqie\LaravelPasswordless\Events')
     ->classes()
     ->toBeClasses()
     ->not->toExtend(\Illuminate\Broadcasting\Channel::class);
 
 arch('support classes do not extend Eloquent Model')
-    ->expect('Wiredrhino\LaravelPasswordless\Support')
+    ->expect('Torqie\LaravelPasswordless\Support')
     ->not->toExtend(\Illuminate\Database\Eloquent\Model::class);
 
 arch('contracts contain only interfaces')
-    ->expect('Wiredrhino\LaravelPasswordless\Contracts')
+    ->expect('Torqie\LaravelPasswordless\Contracts')
     ->toBeInterfaces();

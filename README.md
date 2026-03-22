@@ -1,9 +1,9 @@
 # laravel-passwordless
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/wiredrhino/laravel-passwordless.svg?style=flat-square)](https://packagist.org/packages/wiredrhino/laravel-passwordless)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/wiredrhino/laravel-passwordless/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/wiredrhino/laravel-passwordless/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/wiredrhino/laravel-passwordless/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/wiredrhino/laravel-passwordless/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/wiredrhino/laravel-passwordless.svg?style=flat-square)](https://packagist.org/packages/wiredrhino/laravel-passwordless)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/torqie/laravel-passwordless.svg?style=flat-square)](https://packagist.org/packages/torqie/laravel-passwordless)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/torqie/laravel-passwordless/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/torqie/laravel-passwordless/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/torqie/laravel-passwordless/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/torqie/laravel-passwordless/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/torqie/laravel-passwordless.svg?style=flat-square)](https://packagist.org/packages/torqie/laravel-passwordless)
 
 Passwordless authentication for Laravel via **magic links** and **login codes** (OTP). No passwords, no complexity — just click a link or type a code.
 
@@ -28,7 +28,7 @@ Passwordless authentication for Laravel via **magic links** and **login codes** 
 Install via Composer:
 
 ```bash
-composer require wiredrhino/laravel-passwordless
+composer require torqie/laravel-passwordless
 ```
 
 Publish and run the migrations:
@@ -61,7 +61,7 @@ php artisan vendor:publish --tag="laravel-passwordless-views"
 ### 1. Add the trait to your User model
 
 ```php
-use Wiredrhino\LaravelPasswordless\Traits\HasPasswordlessAuth;
+use Torqie\LaravelPasswordless\Traits\HasPasswordlessAuth;
 
 class User extends Authenticatable
 {
@@ -117,7 +117,7 @@ Link to either flow from your login page:
 Use the `LaravelPasswordless` facade when you need to trigger a magic link or login code from your own code (e.g. inside a controller, job, or listener):
 
 ```php
-use Wiredrhino\LaravelPasswordless\Facades\LaravelPasswordless;
+use Torqie\LaravelPasswordless\Facades\LaravelPasswordless;
 
 // Send a magic link — returns the signed URL
 $url = LaravelPasswordless::for($user)->sendMagicLink();
@@ -322,14 +322,14 @@ php artisan vendor:publish --tag="laravel-passwordless-views"
 
 ### `actions`
 
-Swap any action class with your own implementation. Your class must implement the corresponding contract from `Wiredrhino\LaravelPasswordless\Contracts`.
+Swap any action class with your own implementation. Your class must implement the corresponding contract from `Torqie\LaravelPasswordless\Contracts`.
 
 ```php
 'actions' => [
     'generate_magic_link'     => \App\Auth\MyGenerateMagicLinkAction::class,
-    'authenticate_magic_link' => \Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction::class,
-    'generate_login_code'     => \Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction::class,
-    'authenticate_login_code' => \Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction::class,
+    'authenticate_magic_link' => \Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction::class,
+    'generate_login_code'     => \Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction::class,
+    'authenticate_login_code' => \Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction::class,
 ],
 ```
 
@@ -342,7 +342,7 @@ Swap any action class with your own implementation. Your class must implement th
 1. Create a class that implements the relevant contract:
 
 ```php
-use Wiredrhino\LaravelPasswordless\Contracts\GeneratesMagicLink;
+use Torqie\LaravelPasswordless\Contracts\GeneratesMagicLink;
 
 class MyGenerateMagicLinkAction implements GeneratesMagicLink
 {
@@ -372,7 +372,7 @@ The package dispatches three events you can listen to in your `EventServiceProvi
 | `UserAuthenticatedPasswordlessly` | A user successfully logs in | `$authenticatable`, `$type` (`magic_link` \| `login_code`) |
 
 ```php
-use Wiredrhino\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
+use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
 
 class LogPasswordlessLogin
 {

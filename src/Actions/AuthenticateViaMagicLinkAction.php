@@ -1,13 +1,13 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Actions;
+namespace Torqie\LaravelPasswordless\Actions;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Wiredrhino\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
-use Wiredrhino\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
+use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 
 class AuthenticateViaMagicLinkAction implements AuthenticatesViaMagicLink
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Commands;
+namespace Torqie\LaravelPasswordless\Commands;
 
 use Illuminate\Console\Command;
 

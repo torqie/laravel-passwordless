@@ -1,11 +1,11 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Database\Factories;
+namespace Torqie\LaravelPasswordless\Database\Factories;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 
 /**
  * @extends Factory<PasswordlessToken>

@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Event;
-use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
-use Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction;
-use Wiredrhino\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
+use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
     $this->user   = User::create(['email' => 'test@example.com']);

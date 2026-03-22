@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
-use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
-use Wiredrhino\LaravelPasswordless\Tests\Models\User;
+use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
     $user = User::create(['email' => 'purge@example.com']);

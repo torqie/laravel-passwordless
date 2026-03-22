@@ -1,14 +1,14 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless;
+namespace Torqie\LaravelPasswordless;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Wiredrhino\LaravelPasswordless\Contracts\GeneratesLoginCode;
-use Wiredrhino\LaravelPasswordless\Contracts\GeneratesMagicLink;
-use Wiredrhino\LaravelPasswordless\Events\LoginCodeSent;
-use Wiredrhino\LaravelPasswordless\Events\MagicLinkSent;
-use Wiredrhino\LaravelPasswordless\Notifications\LoginCodeNotification;
-use Wiredrhino\LaravelPasswordless\Notifications\MagicLinkNotification;
+use Torqie\LaravelPasswordless\Contracts\GeneratesLoginCode;
+use Torqie\LaravelPasswordless\Contracts\GeneratesMagicLink;
+use Torqie\LaravelPasswordless\Events\LoginCodeSent;
+use Torqie\LaravelPasswordless\Events\MagicLinkSent;
+use Torqie\LaravelPasswordless\Notifications\LoginCodeNotification;
+use Torqie\LaravelPasswordless\Notifications\MagicLinkNotification;
 
 class LaravelPasswordless
 {
