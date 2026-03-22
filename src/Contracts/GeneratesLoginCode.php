@@ -12,4 +12,3 @@ interface GeneratesLoginCode
      */
     public function generate(Authenticatable $authenticatable): string;
 }
-

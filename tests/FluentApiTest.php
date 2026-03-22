@@ -102,14 +102,14 @@ it('throws a LogicException if sendMagicLink is called without for()', function 
     Notification::fake();
 
     expect(fn () => LaravelPasswordless::sendMagicLink())
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 });
 
 it('throws a LogicException if sendLoginCode is called without for()', function () {
     Notification::fake();
 
     expect(fn () => LaravelPasswordless::sendLoginCode())
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 });
 
 // -------------------------------------------------------------------------
@@ -122,6 +122,5 @@ it('for() does not mutate the facade singleton', function () {
     LaravelPasswordless::for($this->user)->sendMagicLink();
 
     expect(fn () => LaravelPasswordless::sendMagicLink())
-        ->toThrow(\LogicException::class);
+        ->toThrow(LogicException::class);
 });
-

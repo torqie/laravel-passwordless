@@ -13,15 +13,11 @@ class ResolveUserForSendAction
      *
      * Returns null when no account matches the email — the caller must handle
      * this silently to prevent user-enumeration.
-     *
-     * @param string $email
-     * @param string $ip
-     * @return Authenticatable|null
      */
     public function handle(string $email, string $ip): ?Authenticatable
     {
-        $rateLimitKey = 'passwordless:send:' . $ip . '|' . $email;
-        $sendLimit    = (int) config('passwordless.rate_limits.send', 5);
+        $rateLimitKey = 'passwordless:send:'.$ip.'|'.$email;
+        $sendLimit = (int) config('passwordless.rate_limits.send', 5);
 
         if (RateLimiter::tooManyAttempts($rateLimitKey, $sendLimit)) {
             $seconds = RateLimiter::availableIn($rateLimitKey);
@@ -39,4 +35,3 @@ class ResolveUserForSendAction
         return $userModel::where('email', $email)->first();
     }
 }
-

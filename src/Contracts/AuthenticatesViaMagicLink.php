@@ -11,4 +11,3 @@ interface AuthenticatesViaMagicLink
      */
     public function authenticate(string $token): RedirectResponse;
 }
-

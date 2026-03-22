@@ -20,7 +20,7 @@ it('is sent via the mail channel', function () {
 
 it('toMail returns a MailMessage with the correct subject', function () {
     $notification = new MagicLinkNotification('https://example.com/magic');
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->subject)->toBe('Your Magic Login Link');
 });
@@ -29,23 +29,22 @@ it('toMail uses the configured custom view when set', function () {
     config()->set('passwordless.views.magic_link_email', 'emails.custom-magic');
 
     $notification = new MagicLinkNotification('https://example.com/magic');
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->view)->toBe('emails.custom-magic');
 });
 
 it('toMail defaults to the package email view', function () {
     $notification = new MagicLinkNotification('https://example.com/magic');
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->view)->toBe('laravel-passwordless::emails.magic-link');
 });
 
 it('exposes the URL in the view data', function () {
-    $url          = 'https://example.com/magic-abc';
+    $url = 'https://example.com/magic-abc';
     $notification = new MagicLinkNotification($url);
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->viewData['url'])->toBe($url);
 });
-

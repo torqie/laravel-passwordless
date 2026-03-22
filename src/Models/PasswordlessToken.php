@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
+use Wiredrhino\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory;
 
 /**
- * @property string      $token
- * @property Carbon      $expires_at
+ * @property string $token
+ * @property Carbon $expires_at
  * @property Carbon|null $used_at
  *
  * @method static Builder<PasswordlessToken> valid()
@@ -19,8 +20,9 @@ use Illuminate\Support\Carbon;
  */
 class PasswordlessToken extends Model
 {
-    /** @use HasFactory<\Wiredrhino\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory> */
+    /** @use HasFactory<PasswordlessTokenFactory> */
     use HasFactory;
+
     protected $fillable = [
         'authenticatable_type',
         'authenticatable_id',
@@ -32,7 +34,7 @@ class PasswordlessToken extends Model
 
     protected $casts = [
         'expires_at' => 'datetime',
-        'used_at'    => 'datetime',
+        'used_at' => 'datetime',
     ];
 
     public function authenticatable(): MorphTo
@@ -45,7 +47,7 @@ class PasswordlessToken extends Model
     // -------------------------------------------------------------------------
 
     /** @param  Builder<PasswordlessToken>  $query
-     *  @return Builder<PasswordlessToken>
+     * @return Builder<PasswordlessToken>
      */
     public function scopeValid(Builder $query): Builder
     {
@@ -53,7 +55,7 @@ class PasswordlessToken extends Model
     }
 
     /** @param  Builder<PasswordlessToken>  $query
-     *  @return Builder<PasswordlessToken>
+     * @return Builder<PasswordlessToken>
      */
     public function scopeUnused(Builder $query): Builder
     {
@@ -61,7 +63,7 @@ class PasswordlessToken extends Model
     }
 
     /** @param  Builder<PasswordlessToken>  $query
-     *  @return Builder<PasswordlessToken>
+     * @return Builder<PasswordlessToken>
      */
     public function scopeOfType(Builder $query, string $type): Builder
     {

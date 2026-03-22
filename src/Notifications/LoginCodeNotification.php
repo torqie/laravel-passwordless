@@ -15,7 +15,6 @@ class LoginCodeNotification extends Notification
     ) {}
 
     /**
-     * @param  mixed  $notifiable
      * @return array<int, string>
      */
     public function via(mixed $notifiable): array
@@ -23,9 +22,6 @@ class LoginCodeNotification extends Notification
         return ['mail'];
     }
 
-    /**
-     * @param  mixed  $notifiable
-     */
     public function toMail(mixed $notifiable): MailMessage
     {
         $view = config('passwordless.views.login_code_email') ?? 'laravel-passwordless::emails.login-code';
@@ -33,9 +29,8 @@ class LoginCodeNotification extends Notification
         return (new MailMessage)
             ->subject(__('Your Login Code'))
             ->view($view, [
-                'code'        => $this->code,
+                'code' => $this->code,
                 'expiresMins' => config('passwordless.ttl', 15),
             ]);
     }
 }
-

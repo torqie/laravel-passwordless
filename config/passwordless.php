@@ -1,5 +1,11 @@
 <?php
 
+use App\Models\User;
+use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
+use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
+use Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction;
+use Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+
 // config for Wiredrhino/LaravelPasswordless
 return [
 
@@ -26,7 +32,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'code' => [
-        'length'  => (int) env('PASSWORDLESS_CODE_LENGTH', 6),
+        'length' => (int) env('PASSWORDLESS_CODE_LENGTH', 6),
         'charset' => env('PASSWORDLESS_CODE_CHARSET', '0123456789'),
     ],
 
@@ -42,7 +48,7 @@ return [
     | User Model
     |--------------------------------------------------------------------------
     */
-    'user_model' => env('PASSWORDLESS_USER_MODEL', \App\Models\User::class),
+    'user_model' => env('PASSWORDLESS_USER_MODEL', User::class),
 
     /*
     |--------------------------------------------------------------------------
@@ -62,7 +68,7 @@ return [
     |             the user must wait.
     */
     'rate_limits' => [
-        'send'   => (int) env('PASSWORDLESS_RATE_LIMIT_SEND', 5),
+        'send' => (int) env('PASSWORDLESS_RATE_LIMIT_SEND', 5),
         'verify' => (int) env('PASSWORDLESS_RATE_LIMIT_VERIFY', 5),
     ],
 
@@ -72,7 +78,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'redirects' => [
-        'after_login'   => env('PASSWORDLESS_REDIRECT_AFTER_LOGIN', '/dashboard'),
+        'after_login' => env('PASSWORDLESS_REDIRECT_AFTER_LOGIN', '/dashboard'),
         'invalid_token' => env('PASSWORDLESS_REDIRECT_INVALID', '/login'),
     ],
 
@@ -83,7 +89,7 @@ return [
     | Prefix and middleware applied to all passwordless routes.
     */
     'routes' => [
-        'prefix'     => env('PASSWORDLESS_ROUTE_PREFIX', 'auth'),
+        'prefix' => env('PASSWORDLESS_ROUTE_PREFIX', 'auth'),
         'middleware' => ['web'],
     ],
 
@@ -97,11 +103,11 @@ return [
     */
     'views' => [
         'magic_link_request' => null, // e.g. 'auth.magic-link.request'
-        'magic_link_sent'    => null, // e.g. 'auth.magic-link.sent'
-        'magic_link_email'   => null, // e.g. 'emails.magic-link'
+        'magic_link_sent' => null, // e.g. 'auth.magic-link.sent'
+        'magic_link_email' => null, // e.g. 'emails.magic-link'
         'login_code_request' => null, // e.g. 'auth.login-code.request'
-        'login_code_verify'  => null, // e.g. 'auth.login-code.verify'
-        'login_code_email'   => null, // e.g. 'emails.login-code'
+        'login_code_verify' => null, // e.g. 'auth.login-code.verify'
+        'login_code_email' => null, // e.g. 'emails.login-code'
     ],
 
     /*
@@ -112,10 +118,10 @@ return [
     | that implements the corresponding contract.
     */
     'actions' => [
-        'generate_magic_link'     => \Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class,
-        'authenticate_magic_link' => \Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction::class,
-        'generate_login_code'     => \Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction::class,
-        'authenticate_login_code' => \Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction::class,
+        'generate_magic_link' => GenerateMagicLinkAction::class,
+        'authenticate_magic_link' => AuthenticateViaMagicLinkAction::class,
+        'generate_login_code' => GenerateLoginCodeAction::class,
+        'authenticate_login_code' => AuthenticateViaLoginCodeAction::class,
     ],
 
 ];

@@ -8,7 +8,7 @@ use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
 use Wiredrhino\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
-    $this->user   = User::create(['email' => 'test@example.com']);
+    $this->user = User::create(['email' => 'test@example.com']);
     $this->action = app(AuthenticateViaMagicLinkAction::class);
 });
 
@@ -26,11 +26,11 @@ it('redirects to invalid_token when the token is expired', function () {
     $plain = 'plain-expired';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'magic_link',
-        'expires_at'           => now()->subMinute(),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'magic_link',
+        'expires_at' => now()->subMinute(),
+        'used_at' => null,
     ]);
 
     $response = $this->action->authenticate($plain);
@@ -42,11 +42,11 @@ it('redirects to invalid_token when the token is already used', function () {
     $plain = 'plain-used';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'magic_link',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => now()->subSecond(),
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'magic_link',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => now()->subSecond(),
     ]);
 
     $response = $this->action->authenticate($plain);
@@ -62,11 +62,11 @@ it('redirects to after_login on a valid token', function () {
     $plain = 'plain-valid';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'magic_link',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'magic_link',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $response = $this->action->authenticate($plain);
@@ -78,11 +78,11 @@ it('marks the token as used after authentication', function () {
     $plain = 'plain-mark-used';
     $token = PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'magic_link',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'magic_link',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $this->action->authenticate($plain);
@@ -96,11 +96,11 @@ it('fires the UserAuthenticatedPasswordlessly event with type magic_link', funct
     $plain = 'plain-event';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'magic_link',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'magic_link',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $this->action->authenticate($plain);
@@ -123,4 +123,3 @@ it('logs the user in via a real signed URL', function () {
     $response->assertRedirect('/dashboard');
     $this->assertAuthenticatedAs($this->user);
 });
-

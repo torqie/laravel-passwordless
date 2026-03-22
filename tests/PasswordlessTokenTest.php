@@ -16,12 +16,12 @@ function makeToken(User $user, array $overrides = []): PasswordlessToken
 {
     return PasswordlessToken::create(array_merge([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $user->id,
-        'token'                => hash('sha256', uniqid('token', true)),
-        'type'                 => 'magic_link',
-        'plain_text'           => null,
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $user->id,
+        'token' => hash('sha256', uniqid('token', true)),
+        'type' => 'magic_link',
+        'plain_text' => null,
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ], $overrides));
 }
 
@@ -109,7 +109,7 @@ it('ofType() scope filters by type', function () {
 // -------------------------------------------------------------------------
 
 it('authenticatable() morphs back to the owning model', function () {
-    $user  = makeUser();
+    $user = makeUser();
     $token = makeToken($user);
 
     expect($token->authenticatable)->toBeInstanceOf(User::class);
@@ -121,7 +121,7 @@ it('authenticatable() morphs back to the owning model', function () {
 // -------------------------------------------------------------------------
 
 it('passwordlessTokens() returns all tokens for the user', function () {
-    $user  = makeUser();
+    $user = makeUser();
     $other = makeUser('other@example.com');
 
     makeToken($user);
@@ -161,4 +161,3 @@ it('invalidatePasswordlessTokens() can scope to a single type', function () {
     expect(PasswordlessToken::ofType('magic_link')->unused()->count())->toBe(0);
     expect(PasswordlessToken::ofType('login_code')->unused()->count())->toBe(1);
 });
-

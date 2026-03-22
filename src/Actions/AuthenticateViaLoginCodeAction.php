@@ -20,7 +20,7 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
     {
         $maxAttempts = (int) config('passwordless.rate_limits.verify', 5);
         $decaySeconds = (int) config('passwordless.ttl', 15) * 60;
-        $rateLimitKey = 'passwordless:code:' . Str::lower($email);
+        $rateLimitKey = 'passwordless:code:'.Str::lower($email);
 
         if (RateLimiter::tooManyAttempts($rateLimitKey, $maxAttempts)) {
             $seconds = RateLimiter::availableIn($rateLimitKey);
@@ -32,7 +32,7 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
 
         /** @var class-string $userModel */
         $userModel = config('passwordless.user_model');
-        $user      = $userModel::where('email', $email)->first();
+        $user = $userModel::where('email', $email)->first();
 
         if ($user === null) {
             RateLimiter::hit($rateLimitKey, $decaySeconds);
@@ -79,4 +79,3 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
         return redirect()->to((string) config('passwordless.redirects.after_login', '/dashboard'));
     }
 }
-

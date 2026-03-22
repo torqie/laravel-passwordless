@@ -2,9 +2,15 @@
 
 namespace Wiredrhino\LaravelPasswordless\Tests;
 
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Router;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Wiredrhino\LaravelPasswordless\LaravelPasswordlessServiceProvider;
 use Wiredrhino\LaravelPasswordless\Tests\Models\User;
@@ -31,9 +37,9 @@ class TestCase extends Orchestra
         // Database — fresh in-memory SQLite for every test
         config()->set('database.default', 'testing');
         config()->set('database.connections.testing', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
         // Session & cache must use array driver for isolation
@@ -41,7 +47,7 @@ class TestCase extends Orchestra
         config()->set('cache.default', 'array');
 
         // A fixed key so URL::temporarySignedRoute works within the same test
-        config()->set('app.key', 'base64:' . base64_encode(str_repeat('a', 32)));
+        config()->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
         config()->set('app.url', 'http://localhost');
 
         // Bind the test User model into the package
@@ -52,10 +58,10 @@ class TestCase extends Orchestra
         // Auth wired to the test User model
         config()->set('auth.providers.users', [
             'driver' => 'eloquent',
-            'model'  => User::class,
+            'model' => User::class,
         ]);
         config()->set('auth.guards.web', [
-            'driver'   => 'session',
+            'driver' => 'session',
             'provider' => 'users',
         ]);
     }
@@ -73,8 +79,8 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
-        /** @var \Illuminate\Database\Migrations\Migration $migration */
-        $migration = include __DIR__ . '/../database/migrations/create_passwordless_table.php.stub';
+        /** @var Migration $migration */
+        $migration = include __DIR__.'/../database/migrations/create_passwordless_table.php.stub';
         $migration->up();
     }
 
@@ -82,17 +88,17 @@ class TestCase extends Orchestra
     {
         // Remove CSRF from the web group — keeps session middleware intact
         $this->app->make(Router::class)->middlewareGroup('web', [
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
+            SubstituteBindings::class,
         ]);
 
         // Register the package's view namespace explicitly so HTTP tests can render views
         $this->app->make('view')->addNamespace(
             'laravel-passwordless',
-            realpath(__DIR__ . '/../resources/views')
+            realpath(__DIR__.'/../resources/views')
         );
     }
 }

@@ -6,7 +6,7 @@ use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
 use Wiredrhino\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
-    $this->user   = User::create(['email' => 'test@example.com']);
+    $this->user = User::create(['email' => 'test@example.com']);
     $this->action = app(GenerateMagicLinkAction::class);
 });
 
@@ -26,7 +26,7 @@ it('sets expires_at according to the configured TTL', function () {
 
     $this->action->generate($this->user);
 
-    $token   = PasswordlessToken::first();
+    $token = PasswordlessToken::first();
     $minutes = abs($token->expires_at->diffInMinutes(now()));
     expect($minutes)->toBeGreaterThanOrEqual(29)->toBeLessThanOrEqual(31);
 });
@@ -35,7 +35,7 @@ it('stores a SHA-256 hash, not the plain token', function () {
     $url = $this->action->generate($this->user);
 
     // token is a *path* parameter: http://localhost/auth/magic-link/{TOKEN}?expires=...
-    $path       = (string) parse_url($url, PHP_URL_PATH);
+    $path = (string) parse_url($url, PHP_URL_PATH);
     $plainToken = basename($path);
 
     $dbToken = PasswordlessToken::first();
@@ -64,4 +64,3 @@ it('associates the token with the correct authenticatable', function () {
     expect($token->authenticatable_type)->toBe(User::class);
     expect($token->authenticatable_id)->toBe($this->user->id);
 });
-

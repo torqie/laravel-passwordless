@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
+use Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction;
 use Wiredrhino\LaravelPasswordless\Events\MagicLinkSent;
 use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
 use Wiredrhino\LaravelPasswordless\Notifications\MagicLinkNotification;
@@ -76,7 +77,7 @@ it('fails validation for an invalid email format', function () {
 // -------------------------------------------------------------------------
 
 it('authenticates the user via a valid signed URL and redirects to after_login', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     $this->get($url)
@@ -86,7 +87,7 @@ it('authenticates the user via a valid signed URL and redirects to after_login',
 });
 
 it('marks the token as used after a successful click-through', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     $this->get($url);
@@ -95,18 +96,18 @@ it('marks the token as used after a successful click-through', function () {
 });
 
 it('redirects to invalid_token when the signature is tampered with', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     // Tamper with the signature
-    $this->get($url . 'tampered')
+    $this->get($url.'tampered')
         ->assertRedirect('/login');
 
     $this->assertGuest();
 });
 
 it('redirects to invalid_token when the token has already been used', function () {
-    $url = app(\Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     // First click — marks token as used
@@ -116,4 +117,3 @@ it('redirects to invalid_token when the token has already been used', function (
     $this->get($url)
         ->assertRedirect('/login');
 });
-
