@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Torqie\LaravelPasswordless\Http\Controllers\LoginCodeController;
 use Torqie\LaravelPasswordless\Http\Controllers\MagicLinkController;
 
-$prefix     = config('passwordless.routes.prefix', 'auth');
+$prefix = config('passwordless.routes.prefix', 'auth');
 $middleware = config('passwordless.routes.middleware', ['web']);
-$type       = config('passwordless.type', 'both');
+$type = config('passwordless.type', 'both');
 
 Route::prefix($prefix)
     ->middleware($middleware)
@@ -43,6 +43,3 @@ Route::prefix($prefix)
                 ->name('passwordless.login-code.authenticate');
         }
     });
-
-
-

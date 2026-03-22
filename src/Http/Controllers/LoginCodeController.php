@@ -103,4 +103,3 @@ class LoginCodeController extends Controller
         return $response;
     }
 }
-

@@ -16,7 +16,7 @@ class PurgePasswordlessTokensCommand extends Command
     public function handle(): int
     {
         $onlyExpired = $this->option('expired');
-        $onlyUsed    = $this->option('used');
+        $onlyUsed = $this->option('used');
 
         $query = PasswordlessToken::query();
 
@@ -28,7 +28,7 @@ class PurgePasswordlessTokensCommand extends Command
             // Default (no flags, or both flags): purge anything expired OR used
             $query->where(function ($q): void {
                 $q->where('expires_at', '<', now())
-                  ->orWhereNotNull('used_at');
+                    ->orWhereNotNull('used_at');
             });
         }
 
@@ -39,4 +39,3 @@ class PurgePasswordlessTokensCommand extends Command
         return self::SUCCESS;
     }
 }
-

@@ -15,9 +15,9 @@ class GenerateLoginCodeAction implements GeneratesLoginCode
 
     public function generate(Authenticatable $authenticatable): string
     {
-        $charset   = (string) config('passwordless.code.charset', '0123456789');
-        $length    = (int) config('passwordless.code.length', 6);
-        $ttl       = (int) config('passwordless.ttl', 15);
+        $charset = (string) config('passwordless.code.charset', '0123456789');
+        $length = (int) config('passwordless.code.length', 6);
+        $ttl = (int) config('passwordless.ttl', 15);
         $plainCode = $this->tokenGenerator->makeCode($charset, $length);
 
         // Revoke any existing valid tokens so only one is active at a time.
@@ -30,10 +30,10 @@ class GenerateLoginCodeAction implements GeneratesLoginCode
 
         PasswordlessToken::create([
             'authenticatable_type' => $authenticatable->getMorphClass(),
-            'authenticatable_id'   => $authenticatable->getAuthIdentifier(),
-            'token'                => $this->tokenGenerator->hash($plainCode),
-            'type'                 => 'login_code',
-            'expires_at'           => now()->addMinutes($ttl),
+            'authenticatable_id' => $authenticatable->getAuthIdentifier(),
+            'token' => $this->tokenGenerator->hash($plainCode),
+            'type' => 'login_code',
+            'expires_at' => now()->addMinutes($ttl),
         ]);
 
         return $plainCode;

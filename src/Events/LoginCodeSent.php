@@ -11,4 +11,3 @@ class LoginCodeSent
         // The code is intentionally excluded to avoid leaking it via event listeners.
     ) {}
 }
-

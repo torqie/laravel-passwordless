@@ -20,7 +20,7 @@ it('is sent via the mail channel', function () {
 
 it('toMail returns a MailMessage with the correct subject', function () {
     $notification = new LoginCodeNotification('123456');
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->subject)->toBe('Your Login Code');
 });
@@ -29,22 +29,21 @@ it('toMail uses the configured custom view when set', function () {
     config()->set('passwordless.views.login_code_email', 'emails.custom-code');
 
     $notification = new LoginCodeNotification('123456');
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->view)->toBe('emails.custom-code');
 });
 
 it('toMail defaults to the package email view', function () {
     $notification = new LoginCodeNotification('123456');
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->view)->toBe('laravel-passwordless::emails.login-code');
 });
 
 it('exposes the code in the view data', function () {
     $notification = new LoginCodeNotification('987654');
-    $mail         = $notification->toMail($this->user);
+    $mail = $notification->toMail($this->user);
 
     expect($mail->viewData['code'])->toBe('987654');
 });
-

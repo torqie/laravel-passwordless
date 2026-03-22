@@ -92,11 +92,11 @@ it('authenticates the user with a valid code', function () {
     $plain = '654321';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $this->withSession(['passwordless.pending_email' => $this->user->email])
@@ -110,11 +110,11 @@ it('clears the pending email from session on success', function () {
     $plain = '111222';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $this->withSession(['passwordless.pending_email' => $this->user->email])
@@ -135,4 +135,3 @@ it('redirects to request when there is no session on verify POST', function () {
     $this->post(route('passwordless.login-code.authenticate'), ['code' => '123456'])
         ->assertRedirect(route('passwordless.login-code.request'));
 });
-

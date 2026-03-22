@@ -24,7 +24,7 @@ class LaravelPasswordless
      */
     public function for(Authenticatable $user): static
     {
-        $clone       = clone $this;
+        $clone = clone $this;
         $clone->user = $user;
 
         return $clone;
@@ -33,7 +33,7 @@ class LaravelPasswordless
     /**
      * Generate a magic link, notify the user, and return the signed URL.
      *
-     * @throws \LogicException  If called without first calling for().
+     * @throws \LogicException If called without first calling for().
      */
     public function sendMagicLink(): string
     {
@@ -52,7 +52,7 @@ class LaravelPasswordless
     /**
      * Generate a one-time login code, notify the user, and return the plain code.
      *
-     * @throws \LogicException  If called without first calling for().
+     * @throws \LogicException If called without first calling for().
      */
     public function sendLoginCode(): string
     {

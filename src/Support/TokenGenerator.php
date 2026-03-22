@@ -16,7 +16,7 @@ class TokenGenerator
         $plain = Str::random(64);
 
         return [
-            'plain'  => $plain,
+            'plain' => $plain,
             'hashed' => $this->hash($plain),
         ];
     }
@@ -53,4 +53,3 @@ class TokenGenerator
         return hash('sha256', $value);
     }
 }
-

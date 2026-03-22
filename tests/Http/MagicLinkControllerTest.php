@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
+use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
 use Torqie\LaravelPasswordless\Events\MagicLinkSent;
 use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 use Torqie\LaravelPasswordless\Notifications\MagicLinkNotification;
@@ -99,7 +100,7 @@ it('redirects to invalid_token when the signature is tampered with', function ()
         ->generate($this->user);
 
     // Tamper with the signature
-    $this->get($url . 'tampered')
+    $this->get($url.'tampered')
         ->assertRedirect('/login');
 
     $this->assertGuest();
@@ -116,4 +117,3 @@ it('redirects to invalid_token when the token has already been used', function (
     $this->get($url)
         ->assertRedirect('/login');
 });
-

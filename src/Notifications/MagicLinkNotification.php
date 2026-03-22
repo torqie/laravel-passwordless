@@ -15,7 +15,6 @@ class MagicLinkNotification extends Notification
     ) {}
 
     /**
-     * @param  mixed  $notifiable
      * @return array<int, string>
      */
     public function via(mixed $notifiable): array
@@ -23,9 +22,6 @@ class MagicLinkNotification extends Notification
         return ['mail'];
     }
 
-    /**
-     * @param  mixed  $notifiable
-     */
     public function toMail(mixed $notifiable): MailMessage
     {
         $view = config('passwordless.views.magic_link_email') ?? 'laravel-passwordless::emails.magic-link';
@@ -33,9 +29,8 @@ class MagicLinkNotification extends Notification
         return (new MailMessage)
             ->subject(__('Your Magic Login Link'))
             ->view($view, [
-                'url'         => $this->magicLinkUrl,
+                'url' => $this->magicLinkUrl,
                 'expiresMins' => config('passwordless.ttl', 15),
             ]);
     }
 }
-

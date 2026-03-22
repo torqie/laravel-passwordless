@@ -13,7 +13,7 @@ class AuthenticateViaMagicLinkAction implements AuthenticatesViaMagicLink
 {
     public function authenticate(string $token): RedirectResponse
     {
-        $hashedToken     = hash('sha256', $token);
+        $hashedToken = hash('sha256', $token);
         $invalidRedirect = (string) config('passwordless.redirects.invalid_token', '/login');
 
         /** @var PasswordlessToken|null $passwordlessToken */

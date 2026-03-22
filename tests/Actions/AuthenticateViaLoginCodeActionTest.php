@@ -9,7 +9,7 @@ use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
-    $this->user   = User::create(['email' => 'test@example.com']);
+    $this->user = User::create(['email' => 'test@example.com']);
     $this->action = app(AuthenticateViaLoginCodeAction::class);
     RateLimiter::clear('passwordless:code:test@example.com');
 });
@@ -21,11 +21,11 @@ beforeEach(function () {
 it('throws a ValidationException for a wrong code', function () {
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', '123456'),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', '123456'),
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     expect(fn () => $this->action->authenticate('test@example.com', '000000'))
@@ -36,11 +36,11 @@ it('throws a ValidationException for an expired code', function () {
     $plain = '999999';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->subMinute(),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'login_code',
+        'expires_at' => now()->subMinute(),
+        'used_at' => null,
     ]);
 
     expect(fn () => $this->action->authenticate('test@example.com', $plain))
@@ -85,11 +85,11 @@ it('redirects to after_login on a valid code', function () {
     $plain = '246810';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $response = $this->action->authenticate('test@example.com', $plain);
@@ -101,11 +101,11 @@ it('marks the token as used after a successful authentication', function () {
     $plain = '135790';
     $token = PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $this->action->authenticate('test@example.com', $plain);
@@ -119,11 +119,11 @@ it('clears the rate limit counter on success', function () {
     $plain = '112233';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $this->action->authenticate('test@example.com', $plain);
@@ -137,11 +137,11 @@ it('fires the UserAuthenticatedPasswordlessly event with type login_code', funct
     $plain = '334455';
     PasswordlessToken::create([
         'authenticatable_type' => User::class,
-        'authenticatable_id'   => $this->user->id,
-        'token'                => hash('sha256', $plain),
-        'type'                 => 'login_code',
-        'expires_at'           => now()->addMinutes(15),
-        'used_at'              => null,
+        'authenticatable_id' => $this->user->id,
+        'token' => hash('sha256', $plain),
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+        'used_at' => null,
     ]);
 
     $this->action->authenticate('test@example.com', $plain);
@@ -151,4 +151,3 @@ it('fires the UserAuthenticatedPasswordlessly event with type login_code', funct
             && $event->authenticatable->id === $this->user->id;
     });
 });
-

@@ -38,24 +38,28 @@ class LaravelPasswordlessServiceProvider extends PackageServiceProvider
         $this->app->bind(GeneratesMagicLink::class, function ($app) {
             /** @var class-string<GeneratesMagicLink> $class */
             $class = config('passwordless.actions.generate_magic_link', GenerateMagicLinkAction::class);
+
             return $app->make($class);
         });
 
         $this->app->bind(AuthenticatesViaMagicLink::class, function ($app) {
             /** @var class-string<AuthenticatesViaMagicLink> $class */
             $class = config('passwordless.actions.authenticate_magic_link', AuthenticateViaMagicLinkAction::class);
+
             return $app->make($class);
         });
 
         $this->app->bind(GeneratesLoginCode::class, function ($app) {
             /** @var class-string<GeneratesLoginCode> $class */
             $class = config('passwordless.actions.generate_login_code', GenerateLoginCodeAction::class);
+
             return $app->make($class);
         });
 
         $this->app->bind(AuthenticatesViaLoginCode::class, function ($app) {
             /** @var class-string<AuthenticatesViaLoginCode> $class */
             $class = config('passwordless.actions.authenticate_login_code', AuthenticateViaLoginCodeAction::class);
+
             return $app->make($class);
         });
 

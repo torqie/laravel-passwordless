@@ -18,4 +18,3 @@ class EnsurePasswordlessTokenIsValid
         return $next($request);
     }
 }
-

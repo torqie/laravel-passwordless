@@ -18,12 +18,12 @@ class PasswordlessTokenFactory extends Factory
     {
         return [
             'authenticatable_type' => 'App\\Models\\User',
-            'authenticatable_id'   => 1,
-            'token'                => hash('sha256', Str::random(64)),
-            'type'                 => 'magic_link',
-            'plain_text'           => null,
-            'expires_at'           => now()->addMinutes(15),
-            'used_at'              => null,
+            'authenticatable_id' => 1,
+            'token' => hash('sha256', Str::random(64)),
+            'type' => 'magic_link',
+            'plain_text' => null,
+            'expires_at' => now()->addMinutes(15),
+            'used_at' => null,
         ];
     }
 
@@ -31,7 +31,7 @@ class PasswordlessTokenFactory extends Factory
     {
         return $this->state([
             'authenticatable_type' => $model->getMorphClass(),
-            'authenticatable_id'   => $model->getAuthIdentifier(),
+            'authenticatable_id' => $model->getAuthIdentifier(),
         ]);
     }
 
@@ -55,4 +55,3 @@ class PasswordlessTokenFactory extends Factory
         return $this->state(['type' => 'login_code', 'plain_text' => null]);
     }
 }
-

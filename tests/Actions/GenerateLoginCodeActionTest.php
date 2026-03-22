@@ -5,7 +5,7 @@ use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 use Torqie\LaravelPasswordless\Tests\Models\User;
 
 beforeEach(function () {
-    $this->user   = User::create(['email' => 'test@example.com']);
+    $this->user = User::create(['email' => 'test@example.com']);
     $this->action = app(GenerateLoginCodeAction::class);
 });
 
@@ -26,7 +26,7 @@ it('returns the plain-text code directly', function () {
 });
 
 it('stores a SHA-256 hash of the code, not the plain text', function () {
-    $code  = $this->action->generate($this->user);
+    $code = $this->action->generate($this->user);
     $token = PasswordlessToken::first();
 
     expect($token->token)->toBe(hash('sha256', $code));
@@ -55,7 +55,7 @@ it('sets expires_at according to the configured TTL', function () {
 
     $this->action->generate($this->user);
 
-    $token   = PasswordlessToken::first();
+    $token = PasswordlessToken::first();
     $minutes = abs($token->expires_at->diffInMinutes(now()));
     expect($minutes)->toBeGreaterThanOrEqual(4)->toBeLessThanOrEqual(6);
 });
@@ -72,6 +72,5 @@ it('throws an InvalidArgumentException for an empty charset', function () {
     config()->set('passwordless.code.charset', '');
 
     expect(fn () => $this->action->generate($this->user))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 });
-

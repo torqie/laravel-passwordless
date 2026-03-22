@@ -11,4 +11,3 @@ interface GeneratesMagicLink
      */
     public function generate(Authenticatable $authenticatable): string;
 }
-

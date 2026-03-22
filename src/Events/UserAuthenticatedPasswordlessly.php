@@ -12,4 +12,3 @@ class UserAuthenticatedPasswordlessly
         public readonly string $type,
     ) {}
 }
-
