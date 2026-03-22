@@ -77,6 +77,9 @@ return [
         'magic_link_request' => null, // e.g. 'auth.magic-link.request'
         'magic_link_sent'    => null, // e.g. 'auth.magic-link.sent'
         'magic_link_email'   => null, // e.g. 'emails.magic-link'
+        'login_code_request' => null, // e.g. 'auth.login-code.request'
+        'login_code_verify'  => null, // e.g. 'auth.login-code.verify'
+        'login_code_email'   => null, // e.g. 'emails.login-code'
     ],
 
 ];
