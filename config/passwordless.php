@@ -118,10 +118,10 @@ return [
     | that implements the corresponding contract.
     */
     'actions' => [
-        'generate_magic_link'     => \Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class,
-        'authenticate_magic_link' => \Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction::class,
-        'generate_login_code'     => \Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction::class,
-        'authenticate_login_code' => \Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction::class,
+        'generate_magic_link' => GenerateMagicLinkAction::class,
+        'authenticate_magic_link' => AuthenticateViaMagicLinkAction::class,
+        'generate_login_code' => GenerateLoginCodeAction::class,
+        'authenticate_login_code' => AuthenticateViaLoginCodeAction::class,
     ],
 
 ];

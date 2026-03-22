@@ -20,7 +20,7 @@ use Torqie\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory;
  */
 class PasswordlessToken extends Model
 {
-    /** @use HasFactory<\Torqie\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory> */
+    /** @use HasFactory<PasswordlessTokenFactory> */
     use HasFactory;
 
     protected $fillable = [
