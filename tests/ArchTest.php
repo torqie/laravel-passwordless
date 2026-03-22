@@ -29,7 +29,7 @@ arch('events are plain data classes with no side-effects')
 
 arch('support classes do not extend Eloquent Model')
     ->expect('Torqie\LaravelPasswordless\Support')
-    ->not->toExtend(Model::class);
+    ->not->toExtend(\Illuminate\Database\Eloquent\Model::class);
 
 arch('contracts contain only interfaces')
     ->expect('Torqie\LaravelPasswordless\Contracts')

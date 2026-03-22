@@ -1,13 +1,13 @@
 <?php
 
-namespace Wiredrhino\LaravelPasswordless\Models;
+namespace Torqie\LaravelPasswordless\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
-use Wiredrhino\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory;
+use Torqie\LaravelPasswordless\Database\Factories\PasswordlessTokenFactory;
 
 /**
  * @property string $token
