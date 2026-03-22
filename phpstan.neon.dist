@@ -6,7 +6,6 @@ parameters:
     phpVersion: 80400
     parallel:
         maximumNumberOfProcesses: 1
-    memory_limit: 1G
     paths:
         - src
         - config
