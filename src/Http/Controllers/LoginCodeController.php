@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
 use Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction;
+use Wiredrhino\LaravelPasswordless\Events\LoginCodeSent;
 use Wiredrhino\LaravelPasswordless\Notifications\LoginCodeNotification;
 
 class LoginCodeController extends Controller
@@ -41,6 +42,7 @@ class LoginCodeController extends Controller
         if ($user !== null) {
             $code = $action->generate($user);
             $user->notify(new LoginCodeNotification($code));
+            event(new LoginCodeSent($user));
         }
 
         // Store the email in session so the verify form knows whose code to check
