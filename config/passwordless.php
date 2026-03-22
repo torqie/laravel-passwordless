@@ -54,4 +54,29 @@ return [
         'invalid_token' => env('PASSWORDLESS_REDIRECT_INVALID', '/login'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Routes
+    |--------------------------------------------------------------------------
+    | Prefix and middleware applied to all passwordless routes.
+    */
+    'routes' => [
+        'prefix'     => env('PASSWORDLESS_ROUTE_PREFIX', 'auth'),
+        'middleware' => ['web'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Views
+    |--------------------------------------------------------------------------
+    | Override any view by pointing to your own. Leave null to use the
+    | package defaults. Alternatively, publish the views with:
+    |   php artisan vendor:publish --tag="laravel-passwordless-views"
+    */
+    'views' => [
+        'magic_link_request' => null, // e.g. 'auth.magic-link.request'
+        'magic_link_sent'    => null, // e.g. 'auth.magic-link.sent'
+        'magic_link_email'   => null, // e.g. 'emails.magic-link'
+    ],
+
 ];
