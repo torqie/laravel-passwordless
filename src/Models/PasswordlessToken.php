@@ -5,7 +5,16 @@ namespace Wiredrhino\LaravelPasswordless\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property Carbon      $expires_at
+ * @property Carbon|null $used_at
+ *
+ * @method static Builder<PasswordlessToken> valid()
+ * @method static Builder<PasswordlessToken> unused()
+ * @method static Builder<PasswordlessToken> ofType(string $type)
+ */
 class PasswordlessToken extends Model
 {
     protected $fillable = [
@@ -32,16 +41,25 @@ class PasswordlessToken extends Model
     // Scopes
     // -------------------------------------------------------------------------
 
+    /** @param  Builder<PasswordlessToken>  $query
+     *  @return Builder<PasswordlessToken>
+     */
     public function scopeValid(Builder $query): Builder
     {
-        return $query->unused()->where('expires_at', '>', now());
+        return $query->whereNull('used_at')->where('expires_at', '>', now());
     }
 
+    /** @param  Builder<PasswordlessToken>  $query
+     *  @return Builder<PasswordlessToken>
+     */
     public function scopeUnused(Builder $query): Builder
     {
         return $query->whereNull('used_at');
     }
 
+    /** @param  Builder<PasswordlessToken>  $query
+     *  @return Builder<PasswordlessToken>
+     */
     public function scopeOfType(Builder $query, string $type): Builder
     {
         return $query->where('type', $type);

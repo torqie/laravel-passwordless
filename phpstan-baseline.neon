@@ -1,0 +1,11 @@
+parameters:
+    ignoreErrors:
+        -
+            identifier: trait.unused
+            path: src/Traits/HasPasswordlessAuth.php
+            message: '#Trait Wiredrhino\\LaravelPasswordless\\Traits\\HasPasswordlessAuth is used zero times#'
+        -
+            identifier: missingType.generics
+            path: src/Models/PasswordlessToken.php
+            message: '#MorphTo does not specify its types#'
+

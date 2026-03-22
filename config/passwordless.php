@@ -82,4 +82,18 @@ return [
         'login_code_email'   => null, // e.g. 'emails.login-code'
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Action Bindings
+    |--------------------------------------------------------------------------
+    | Swap any action with your own implementation by pointing to a class
+    | that implements the corresponding contract.
+    */
+    'actions' => [
+        'generate_magic_link'     => \Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction::class,
+        'authenticate_magic_link' => \Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction::class,
+        'generate_login_code'     => \Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction::class,
+        'authenticate_login_code' => \Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction::class,
+    ],
+
 ];

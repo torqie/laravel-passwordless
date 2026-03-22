@@ -20,7 +20,8 @@ Route::prefix($prefix)
             ->name('passwordless.magic-link.send');
 
         Route::get('magic-link/{token}', [MagicLinkController::class, 'authenticate'])
-            ->name('passwordless.magic-link.authenticate');
+            ->name('passwordless.magic-link.authenticate')
+            ->middleware('passwordless.signed');
 
         // -----------------------------------------------------------------------
         // Login Code (OTP)
