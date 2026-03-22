@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Wiredrhino\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
+use Wiredrhino\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
 use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
 
 class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
@@ -64,6 +65,8 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
         $token->markUsed();
 
         Auth::guard((string) config('passwordless.guard', 'web'))->login($user);
+
+        event(new UserAuthenticatedPasswordlessly($user, 'login_code'));
 
         return redirect()->to((string) config('passwordless.redirects.after_login', '/dashboard'));
     }
