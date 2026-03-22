@@ -6,13 +6,14 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Wiredrhino\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
+use Wiredrhino\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
 use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
 
 class AuthenticateViaMagicLinkAction implements AuthenticatesViaMagicLink
 {
     public function authenticate(string $token): RedirectResponse
     {
-        $hashedToken = hash('sha256', $token);
+        $hashedToken     = hash('sha256', $token);
         $invalidRedirect = (string) config('passwordless.redirects.invalid_token', '/login');
 
         /** @var PasswordlessToken|null $passwordlessToken */
@@ -37,9 +38,8 @@ class AuthenticateViaMagicLinkAction implements AuthenticatesViaMagicLink
 
         Auth::guard((string) config('passwordless.guard', 'web'))->login($authenticatable);
 
+        event(new UserAuthenticatedPasswordlessly($authenticatable, 'magic_link'));
+
         return redirect()->to((string) config('passwordless.redirects.after_login', '/dashboard'));
     }
 }
-
-
-
