@@ -5,9 +5,11 @@ namespace Wiredrhino\LaravelPasswordless\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
 use Wiredrhino\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Wiredrhino\LaravelPasswordless\Actions\ResolveUserForSendAction;
 use Wiredrhino\LaravelPasswordless\Events\MagicLinkSent;
 use Wiredrhino\LaravelPasswordless\Notifications\MagicLinkNotification;
 
@@ -16,8 +18,12 @@ class MagicLinkController extends Controller
     /**
      * GET /auth/magic-link
      */
-    public function request(): View
+    public function request(): View|RedirectResponse
     {
+        if (Auth::guard((string) config('passwordless.guard', 'web'))->check()) {
+            return redirect()->to((string) config('passwordless.redirects.after_login', '/dashboard'));
+        }
+
         $view = config('passwordless.views.magic_link_request') ?? 'laravel-passwordless::magic-link.request';
 
         return view($view);
@@ -26,17 +32,16 @@ class MagicLinkController extends Controller
     /**
      * POST /auth/magic-link
      */
-    public function send(Request $request, GenerateMagicLinkAction $action): View|RedirectResponse
+    public function send(Request $request, GenerateMagicLinkAction $action, ResolveUserForSendAction $resolver): View|RedirectResponse
     {
         $request->validate(['email' => ['required', 'email']]);
 
-        /** @var class-string $userModel */
-        $userModel = config('passwordless.user_model');
-        $user      = $userModel::where('email', $request->input('email'))->first();
+        $user = $resolver->handle((string) $request->input('email'), (string) $request->ip());
 
         // Always show the "sent" view to avoid user enumeration
         if ($user !== null) {
             $url = $action->generate($user);
+            // @phpstan-ignore method.notFound ($user is expected to use the Notifiable trait)
             $user->notify(new MagicLinkNotification($url));
             event(new MagicLinkSent($user, $url));
         }

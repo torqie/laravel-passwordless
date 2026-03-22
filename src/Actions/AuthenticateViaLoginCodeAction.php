@@ -13,16 +13,16 @@ use Wiredrhino\LaravelPasswordless\Models\PasswordlessToken;
 
 class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
 {
-    private const MAX_ATTEMPTS = 5;
-
     /**
      * @throws ValidationException
      */
     public function authenticate(string $email, string $code): RedirectResponse
     {
+        $maxAttempts = (int) config('passwordless.rate_limits.verify', 5);
+        $decaySeconds = (int) config('passwordless.ttl', 15) * 60;
         $rateLimitKey = 'passwordless:code:' . Str::lower($email);
 
-        if (RateLimiter::tooManyAttempts($rateLimitKey, self::MAX_ATTEMPTS)) {
+        if (RateLimiter::tooManyAttempts($rateLimitKey, $maxAttempts)) {
             $seconds = RateLimiter::availableIn($rateLimitKey);
 
             throw ValidationException::withMessages([
@@ -35,7 +35,7 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
         $user      = $userModel::where('email', $email)->first();
 
         if ($user === null) {
-            RateLimiter::hit($rateLimitKey);
+            RateLimiter::hit($rateLimitKey, $decaySeconds);
 
             throw ValidationException::withMessages([
                 'code' => ['The code is incorrect or has expired.'],
@@ -44,16 +44,18 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
 
         $hashedCode = hash('sha256', $code);
 
+        // Fetch all valid login-code tokens for this user, then compare
+        // hashes in constant time to prevent timing side-channels.
         /** @var PasswordlessToken|null $token */
         $token = PasswordlessToken::ofType('login_code')
             ->valid()
             ->where('authenticatable_type', $user->getMorphClass())
             ->where('authenticatable_id', $user->getAuthIdentifier())
-            ->where('token', $hashedCode)
-            ->first();
+            ->get()
+            ->first(fn (PasswordlessToken $t) => hash_equals($t->token, $hashedCode));
 
         if ($token === null) {
-            RateLimiter::hit($rateLimitKey);
+            RateLimiter::hit($rateLimitKey, $decaySeconds);
 
             throw ValidationException::withMessages([
                 'code' => ['The code is incorrect or has expired.'],
@@ -64,7 +66,13 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
 
         $token->markUsed();
 
-        Auth::guard((string) config('passwordless.guard', 'web'))->login($user);
+        $remember = (bool) config('passwordless.remember', false);
+        Auth::guard((string) config('passwordless.guard', 'web'))->login($user, $remember);
+
+        // Prevent session-fixation attacks by rotating the session ID.
+        if (request()->hasSession()) {
+            request()->session()->regenerate();
+        }
 
         event(new UserAuthenticatedPasswordlessly($user, 'login_code'));
 

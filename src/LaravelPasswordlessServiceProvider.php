@@ -23,9 +23,12 @@ class LaravelPasswordlessServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-passwordless')
             ->hasConfigFile('passwordless')
-            ->hasViews()
+            ->hasViews('laravel-passwordless')
             ->hasRoutes('passwordless')
-            ->hasMigration('create_passwordless_table')
+            ->hasMigrations([
+                'create_passwordless_table',
+                'make_password_nullable_on_users_table',
+            ])
             ->hasCommand(PurgePasswordlessTokensCommand::class);
     }
 

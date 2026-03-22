@@ -5,9 +5,11 @@ namespace Wiredrhino\LaravelPasswordless\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Wiredrhino\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
 use Wiredrhino\LaravelPasswordless\Actions\GenerateLoginCodeAction;
+use Wiredrhino\LaravelPasswordless\Actions\ResolveUserForSendAction;
 use Wiredrhino\LaravelPasswordless\Events\LoginCodeSent;
 use Wiredrhino\LaravelPasswordless\Notifications\LoginCodeNotification;
 
@@ -17,8 +19,12 @@ class LoginCodeController extends Controller
      * GET /auth/code
      * Show the code request form.
      */
-    public function request(): View
+    public function request(): View|RedirectResponse
     {
+        if (Auth::guard((string) config('passwordless.guard', 'web'))->check()) {
+            return redirect()->to((string) config('passwordless.redirects.after_login', '/dashboard'));
+        }
+
         $view = config('passwordless.views.login_code_request') ?? 'laravel-passwordless::login-code.request';
 
         return view($view);
@@ -28,19 +34,18 @@ class LoginCodeController extends Controller
      * POST /auth/code
      * Send the one-time code to the provided email address.
      */
-    public function send(Request $request, GenerateLoginCodeAction $action): RedirectResponse
+    public function send(Request $request, GenerateLoginCodeAction $action, ResolveUserForSendAction $resolver): RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'email'],
         ]);
 
-        /** @var class-string $userModel */
-        $userModel = config('passwordless.user_model');
-        $user      = $userModel::where('email', $request->input('email'))->first();
+        $user = $resolver->handle((string) $request->input('email'), (string) $request->ip());
 
         // Always proceed to the verify screen to prevent user enumeration
         if ($user !== null) {
             $code = $action->generate($user);
+            // @phpstan-ignore method.notFound ($user is expected to use the Notifiable trait)
             $user->notify(new LoginCodeNotification($code));
             event(new LoginCodeSent($user));
         }
@@ -57,6 +62,10 @@ class LoginCodeController extends Controller
      */
     public function verify(Request $request): View|RedirectResponse
     {
+        if (Auth::guard((string) config('passwordless.guard', 'web'))->check()) {
+            return redirect()->to((string) config('passwordless.redirects.after_login', '/dashboard'));
+        }
+
         $email = $request->session()->get('passwordless.pending_email');
 
         if ($email === null) {

@@ -20,12 +20,19 @@ class GenerateMagicLinkAction implements GeneratesMagicLink
         $ttl   = (int) config('passwordless.ttl', 15);
         $token = $this->tokenGenerator->makeToken();
 
+        // Revoke any existing valid tokens so only one is active at a time.
+        PasswordlessToken::where('authenticatable_type', $authenticatable->getMorphClass())
+            ->where('authenticatable_id', $authenticatable->getAuthIdentifier())
+            ->ofType('magic_link')
+            ->whereNull('used_at')
+            ->where('expires_at', '>', now())
+            ->update(['used_at' => now()]);
+
         PasswordlessToken::create([
             'authenticatable_type' => $authenticatable->getMorphClass(),
             'authenticatable_id'   => $authenticatable->getAuthIdentifier(),
             'token'                => $token['hashed'],
             'type'                 => 'magic_link',
-            'plain_text'           => null,
             'expires_at'           => now()->addMinutes($ttl),
         ]);
 

@@ -31,17 +31,21 @@ Install via Composer:
 composer require wiredrhino/laravel-passwordless
 ```
 
-Publish and run the migration:
+Publish and run the migrations:
 
 ```bash
-php artisan vendor:publish --tag="laravel-passwordless-migrations"
+php artisan vendor:publish --tag="passwordless-migrations"
 php artisan migrate
 ```
+
+This publishes two migrations:
+- **`create_passwordless_table`** — the tokens table used by magic links and login codes
+- **`make_password_nullable_on_users_table`** — makes the `password` column on your `users` table nullable, since passwordless users don't need one
 
 Publish the config file (optional but recommended):
 
 ```bash
-php artisan vendor:publish --tag="laravel-passwordless-config"
+php artisan vendor:publish --tag="passwordless-config"
 ```
 
 Optionally publish the views to customize them:

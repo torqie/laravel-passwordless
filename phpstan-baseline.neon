@@ -1,11 +1,20 @@
 parameters:
-    ignoreErrors:
-        -
-            identifier: trait.unused
-            path: src/Traits/HasPasswordlessAuth.php
-            message: '#Trait Wiredrhino\\LaravelPasswordless\\Traits\\HasPasswordlessAuth is used zero times#'
-        -
-            identifier: missingType.generics
-            path: src/Models/PasswordlessToken.php
-            message: '#MorphTo does not specify its types#'
+	ignoreErrors:
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 12
+			path: config/passwordless.php
+
+		-
+			message: '#^Class App\\Models\\User not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: config/passwordless.php
+
+		-
+			message: '#^Trait Wiredrhino\\LaravelPasswordless\\Traits\\HasPasswordlessAuth is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Traits/HasPasswordlessAuth.php
 

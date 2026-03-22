@@ -36,7 +36,13 @@ class AuthenticateViaMagicLinkAction implements AuthenticatesViaMagicLink
 
         $passwordlessToken->markUsed();
 
-        Auth::guard((string) config('passwordless.guard', 'web'))->login($authenticatable);
+        $remember = (bool) config('passwordless.remember', false);
+        Auth::guard((string) config('passwordless.guard', 'web'))->login($authenticatable, $remember);
+
+        // Prevent session-fixation attacks by rotating the session ID.
+        if (request()->hasSession()) {
+            request()->session()->regenerate();
+        }
 
         event(new UserAuthenticatedPasswordlessly($authenticatable, 'magic_link'));
 

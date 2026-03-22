@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
 
 /**
+ * @property string      $token
  * @property Carbon      $expires_at
  * @property Carbon|null $used_at
  *
@@ -25,7 +26,6 @@ class PasswordlessToken extends Model
         'authenticatable_id',
         'token',
         'type',
-        'plain_text',
         'expires_at',
         'used_at',
     ];

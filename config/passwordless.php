@@ -46,6 +46,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Remember Me
+    |--------------------------------------------------------------------------
+    | Whether to create a persistent "remember me" session when the user
+    | authenticates via a magic link or login code.
+    */
+    'remember' => env('PASSWORDLESS_REMEMBER', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rate Limits
+    |--------------------------------------------------------------------------
+    | 'send'   – max send requests (per IP, per minute) before throttling.
+    | 'verify' – max failed code attempts (per email, per TTL window) before
+    |             the user must wait.
+    */
+    'rate_limits' => [
+        'send'   => (int) env('PASSWORDLESS_RATE_LIMIT_SEND', 5),
+        'verify' => (int) env('PASSWORDLESS_RATE_LIMIT_VERIFY', 5),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Redirect Paths
     |--------------------------------------------------------------------------
     */

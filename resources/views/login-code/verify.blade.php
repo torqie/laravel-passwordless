@@ -1,17 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter Your Code</title>
-</head>
-<body>
-    <h1>Enter your login code</h1>
+@extends('laravel-passwordless::layouts.auth')
 
-    <p>We sent a {{ config('passwordless.code.length', 6) }}-digit code to <strong>{{ $email }}</strong>. It expires in {{ config('passwordless.ttl', 15) }} minutes.</p>
+@section('title', 'Enter Your Code')
+
+@section('content')
+    <div class="icon-wrap">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+    </div>
+
+    <h1 class="card-title">Enter your login code</h1>
+    <p class="card-subtitle">
+        We sent a {{ config('passwordless.code.length', 6) }}-digit code to <strong>{{ $email }}</strong>.
+        It expires in {{ config('passwordless.ttl', 15) }} minutes.
+    </p>
 
     @if ($errors->any())
-        <ul>
+        <ul class="errors">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
@@ -20,26 +25,29 @@
 
     <form method="POST" action="{{ route('passwordless.login-code.authenticate') }}">
         @csrf
-        <div>
+        <div class="field">
             <label for="code">Login code</label>
             <input
                 type="text"
                 id="code"
                 name="code"
+                class="code-input"
                 inputmode="numeric"
                 autocomplete="one-time-code"
                 maxlength="{{ config('passwordless.code.length', 6) }}"
                 required
                 autofocus
-                placeholder="{{ str_repeat('0', config('passwordless.code.length', 6)) }}"
+                placeholder="{{ str_repeat('·', config('passwordless.code.length', 6)) }}"
             />
+            <p class="hint">Enter the {{ config('passwordless.code.length', 6) }}-digit code from your email.</p>
         </div>
-        <button type="submit">Verify Code</button>
+        <button type="submit" class="btn">Verify Code</button>
     </form>
 
-    <p>
-        <a href="{{ route('passwordless.login-code.request') }}">Didn't receive it? Request a new code</a>
+    <hr class="divider">
+
+    <p class="footer-link">
+        Didn't receive it? <a href="{{ route('passwordless.login-code.request') }}">Request a new code</a>
     </p>
-</body>
-</html>
+@endsection
 
