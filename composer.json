@@ -1,5 +1,6 @@
 {
     "name": "torqie/laravel-passwordless",
+    "type": "library",
     "description": "Passwordless authentication for Laravel with magic links and login codes",
     "keywords": [
         "torqie",
@@ -70,6 +71,6 @@
             }
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
