@@ -77,7 +77,7 @@ it('fails validation for an invalid email format', function () {
 // -------------------------------------------------------------------------
 
 it('authenticates the user via a valid signed URL and redirects to after_login', function () {
-    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     $this->get($url)
@@ -87,7 +87,7 @@ it('authenticates the user via a valid signed URL and redirects to after_login',
 });
 
 it('marks the token as used after a successful click-through', function () {
-    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     $this->get($url);
@@ -96,7 +96,7 @@ it('marks the token as used after a successful click-through', function () {
 });
 
 it('redirects to invalid_token when the signature is tampered with', function () {
-    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     // Tamper with the signature
@@ -107,7 +107,7 @@ it('redirects to invalid_token when the signature is tampered with', function ()
 });
 
 it('redirects to invalid_token when the token has already been used', function () {
-    $url = app(\Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction::class)
+    $url = app(GenerateMagicLinkAction::class)
         ->generate($this->user);
 
     // First click — marks token as used
