@@ -9,6 +9,8 @@ use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
 use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Torqie\LaravelPasswordless\Commands\InstallCommand;
+use Torqie\LaravelPasswordless\Commands\InstallInertiaCommand;
 use Torqie\LaravelPasswordless\Commands\PurgePasswordlessTokensCommand;
 use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
 use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
@@ -29,7 +31,9 @@ class LaravelPasswordlessServiceProvider extends PackageServiceProvider
                 'create_passwordless_table',
                 'make_password_nullable_on_users_table',
             ])
-            ->hasCommand(PurgePasswordlessTokensCommand::class);
+            ->hasCommand(PurgePasswordlessTokensCommand::class)
+            ->hasCommand(InstallCommand::class)
+            ->hasCommand(InstallInertiaCommand::class);
     }
 
     public function registeringPackage(): void
