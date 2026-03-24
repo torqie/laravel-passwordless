@@ -31,27 +31,60 @@ Install via Composer:
 composer require torqie/laravel-passwordless
 ```
 
-Publish and run the migrations:
+Then run the interactive install wizard:
 
 ```bash
+php artisan passwordless:install
+```
+
+The wizard walks you through every setup step and writes to your `.env` automatically:
+
+```
+── Step 1: Configuration
+   Publish config file? (config/passwordless.php) [yes]
+
+── Step 2: Migrations
+   Publish migrations? [yes]
+   Run migrations now? [yes]
+
+── Step 3: Authentication Flows
+   Which flow(s)? Both / Magic links only / Login codes only
+
+── Step 4: Frontend Framework
+   Detected: vue (from package.json). Use it? [yes]
+   (or choose: Blade / Vue / React / Svelte)
+
+── Step 5: View Setup
+   Blade  → optionally publish views for customisation
+   Inertia → publish component stubs + writes PASSWORDLESS_INERTIA=true
+
+── Step 6: Session Options
+   Enable remember me? [no]
+```
+
+Use `--force` to overwrite any already-published files when re-running:
+
+```bash
+php artisan passwordless:install --force
+```
+
+### Manual installation (optional)
+
+If you prefer to run each step yourself:
+
+```bash
+# Publish config
+php artisan vendor:publish --tag="passwordless-config"
+
+# Publish and run migrations
 php artisan vendor:publish --tag="passwordless-migrations"
 php artisan migrate
-```
 
-This publishes two migrations:
-- **`create_passwordless_table`** — the tokens table used by magic links and login codes
-- **`make_password_nullable_on_users_table`** — makes the `password` column on your `users` table nullable, since passwordless users don't need one
-
-Publish the config file (optional but recommended):
-
-```bash
-php artisan vendor:publish --tag="passwordless-config"
-```
-
-Optionally publish the views to customize them:
-
-```bash
+# Publish Blade views (optional)
 php artisan vendor:publish --tag="laravel-passwordless-views"
+
+# Scaffold Inertia components for a specific framework (optional)
+php artisan passwordless:install-inertia --framework=vue
 ```
 
 ---
@@ -320,6 +353,91 @@ php artisan vendor:publish --tag="laravel-passwordless-views"
 
 ---
 
+### `inertia` + `components`
+
+If your app uses **Inertia.js**, enable this mode so the package renders your Inertia components instead of Blade views.
+
+The quickest way to get started is the install command — it auto-detects your framework and scaffolds ready-to-use component stubs:
+
+```bash
+php artisan passwordless:install-inertia
+```
+
+Then enable Inertia mode in `config/passwordless.php`:
+
+```php
+'inertia' => true,
+
+'components' => [
+    'magic_link_request' => 'Auth/MagicLinkRequest',
+    'magic_link_sent'    => 'Auth/MagicLinkSent',
+    'login_code_request' => 'Auth/LoginCodeRequest',
+    'login_code_verify'  => 'Auth/LoginCodeVerify',
+],
+```
+
+Or via `.env`:
+
+```dotenv
+PASSWORDLESS_INERTIA=true
+```
+
+When `inertia` is `true`, the controllers call `Inertia::render($component, $props)` instead of `view()`. The `components` keys take precedence over the `views` keys when Inertia is enabled.
+
+**Props passed to each component:**
+
+| Component | Prop | Type | Description |
+|---|---|---|---|
+| `login_code_verify` | `email` | `string` | The pending email address from the session |
+
+All other components receive no additional props.
+
+> **Note:** The `inertiajs/inertia-laravel` package is not a hard dependency of this package — it only needs to be installed in your app if you enable Inertia mode.
+
+**Example Vue component for the login code request form:**
+
+```vue
+<!-- resources/js/Pages/Auth/LoginCodeRequest.vue -->
+<script setup>
+import { useForm } from '@inertiajs/vue3'
+
+const form = useForm({ email: '' })
+const submit = () => form.post(route('passwordless.login-code.send'))
+</script>
+
+<template>
+    <form @submit.prevent="submit">
+        <input v-model="form.email" type="email" placeholder="your@email.com" />
+        <button type="submit">Send code</button>
+        <div v-if="form.errors.email">{{ form.errors.email }}</div>
+    </form>
+</template>
+```
+
+**Example Vue component for the code verify form:**
+
+```vue
+<!-- resources/js/Pages/Auth/LoginCodeVerify.vue -->
+<script setup>
+import { useForm } from '@inertiajs/vue3'
+
+defineProps({ email: String })
+
+const form = useForm({ code: '' })
+const submit = () => form.post(route('passwordless.login-code.authenticate'))
+</script>
+
+<template>
+    <form @submit.prevent="submit">
+        <input v-model="form.code" type="text" placeholder="123456" />
+        <button type="submit">Verify</button>
+        <div v-if="form.errors.code">{{ form.errors.code }}</div>
+    </form>
+</template>
+```
+
+---
+
 ### `actions`
 
 Swap any action class with your own implementation. Your class must implement the corresponding contract from `Torqie\LaravelPasswordless\Contracts`.
@@ -400,6 +518,51 @@ Route::get('/my-route/{token}', MyController::class)->middleware('passwordless.s
 ---
 
 ## Artisan Commands
+
+### `passwordless:install`
+
+The primary setup wizard. Covers everything in one interactive session: publishing config, migrations, running migrations, choosing your auth flows, scaffolding views or Inertia components, and writing `.env` keys.
+
+```bash
+php artisan passwordless:install
+```
+
+Use `--force` to overwrite any already-published files when re-running:
+
+```bash
+php artisan passwordless:install --force
+```
+
+---
+
+### `passwordless:install-inertia`
+
+Standalone command for adding Inertia component stubs to an already-installed app. Reads `package.json` to auto-detect your framework, or accepts `--framework` explicitly.
+
+```bash
+# Auto-detect from package.json
+php artisan passwordless:install-inertia
+
+# Explicit framework
+php artisan passwordless:install-inertia --framework=vue
+php artisan passwordless:install-inertia --framework=react
+php artisan passwordless:install-inertia --framework=svelte
+
+# Overwrite existing stubs
+php artisan passwordless:install-inertia --force
+```
+
+**Published files (Vue example):**
+```
+resources/js/Pages/Auth/LoginCodeRequest.vue
+resources/js/Pages/Auth/LoginCodeVerify.vue
+resources/js/Pages/Auth/MagicLinkRequest.vue
+resources/js/Pages/Auth/MagicLinkSent.vue
+```
+
+After running, the command prints the config snippet you need to add to `config/passwordless.php` to enable Inertia mode.
+
+---
 
 ### `passwordless:purge`
 
