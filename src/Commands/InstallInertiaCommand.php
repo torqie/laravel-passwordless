@@ -15,8 +15,8 @@ class InstallInertiaCommand extends Command
 
     /** @var array<string, array<string, string>> */
     private array $extensions = [
-        'vue'    => ['ext' => 'vue',    'package' => '@inertiajs/vue3'],
-        'react'  => ['ext' => 'jsx',    'package' => '@inertiajs/react'],
+        'vue' => ['ext' => 'vue',    'package' => '@inertiajs/vue3'],
+        'react' => ['ext' => 'jsx',    'package' => '@inertiajs/react'],
         'svelte' => ['ext' => 'svelte', 'package' => '@inertiajs/svelte'],
     ];
 
@@ -111,18 +111,18 @@ class InstallInertiaCommand extends Command
 
     private function publishStubs(string $framework): void
     {
-        $stubDir   = __DIR__.'/../../stubs/inertia/'.$framework;
+        $stubDir = __DIR__.'/../../stubs/inertia/'.$framework;
         $outputDir = resource_path('js/Pages/Auth');
-        $ext       = $this->extensions[$framework]['ext'];
+        $ext = $this->extensions[$framework]['ext'];
 
         File::ensureDirectoryExists($outputDir);
 
         $components = ['LoginCodeRequest', 'LoginCodeVerify', 'MagicLinkRequest', 'MagicLinkSent'];
-        $published  = [];
-        $skipped    = [];
+        $published = [];
+        $skipped = [];
 
         foreach ($components as $component) {
-            $src  = "{$stubDir}/{$component}.{$ext}";
+            $src = "{$stubDir}/{$component}.{$ext}";
             $dest = "{$outputDir}/{$component}.{$ext}";
 
             if (! file_exists($src)) {
@@ -179,4 +179,3 @@ PHP);
         $this->newLine();
     }
 }
-

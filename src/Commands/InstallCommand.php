@@ -1,19 +1,25 @@
 <?php
+
 namespace Torqie\LaravelPasswordless\Commands;
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+
 class InstallCommand extends Command
 {
-    public $signature = "passwordless:install
-                        {--force : Overwrite any already-published files}";
+    public $signature = 'passwordless:install
+                        {--force : Overwrite any already-published files}';
+
     public $description = 'Set up Laravel Passwordless in one step';
+
     /** @var array<string, array<string, string>> */
     private array $frameworks = [
-        'blade'  => ['ext' => 'blade.php', 'label' => 'Blade  (built-in views, no extra JS dependencies)'],
-        'vue'    => ['ext' => 'vue',        'label' => 'Vue    (Inertia.js + @inertiajs/vue3)'],
-        'react'  => ['ext' => 'jsx',        'label' => 'React  (Inertia.js + @inertiajs/react)'],
+        'blade' => ['ext' => 'blade.php', 'label' => 'Blade  (built-in views, no extra JS dependencies)'],
+        'vue' => ['ext' => 'vue',        'label' => 'Vue    (Inertia.js + @inertiajs/vue3)'],
+        'react' => ['ext' => 'jsx',        'label' => 'React  (Inertia.js + @inertiajs/react)'],
         'svelte' => ['ext' => 'svelte',     'label' => 'Svelte (Inertia.js + @inertiajs/svelte)'],
     ];
+
     public function handle(): int
     {
         $this->displayHeader();
@@ -69,13 +75,15 @@ class InstallCommand extends Command
         $this->displayModelReminder();
         $this->displayRoutes($authType);
         $this->displayDone();
+
         return self::SUCCESS;
     }
+
     // -------------------------------------------------------------------------
     private function publishConfig(): void
     {
         $exists = file_exists(config_path('passwordless.php'));
-        $force  = (bool) $this->option('force') ||
+        $force = (bool) $this->option('force') ||
             ($exists && $this->confirm('  Config already exists. Overwrite?', false));
         $this->callSilently('vendor:publish', ['--tag' => 'passwordless-config', '--force' => $force]);
         $this->components->twoColumnDetail(
@@ -83,23 +91,26 @@ class InstallCommand extends Command
             'config/passwordless.php'
         );
     }
+
     private function publishMigrations(): void
     {
         $this->callSilently('vendor:publish', [
-            '--tag'   => 'passwordless-migrations',
+            '--tag' => 'passwordless-migrations',
             '--force' => (bool) $this->option('force'),
         ]);
         $this->components->twoColumnDetail('<fg=green>Published</>', 'database/migrations/ (2 files)');
     }
+
     private function runMigrations(): void
     {
         $this->callSilently('migrate');
         $this->components->twoColumnDetail('<fg=green>Migrated</>', 'passwordless_tokens table ready');
     }
+
     private function selectAuthType(): string
     {
         $options = [
-            'both'       => 'Both magic links and login codes (recommended)',
+            'both' => 'Both magic links and login codes (recommended)',
             'magic_link' => 'Magic links only',
             'login_code' => 'Login codes (OTP) only',
         ];
@@ -108,12 +119,14 @@ class InstallCommand extends Command
             array_values($options),
             0
         );
+
         return (string) array_search($selected, $options, true);
     }
+
     private function selectFramework(): string
     {
         $detected = $this->detectFromPackageJson();
-        $labels   = array_column($this->frameworks, 'label');
+        $labels = array_column($this->frameworks, 'label');
         if (count($detected) === 1) {
             $fw = $detected[0];
             $this->components->twoColumnDetail('<fg=cyan>Detected</>', "{$fw} (from package.json)");
@@ -129,13 +142,15 @@ class InstallCommand extends Command
                 return $key;
             }
         }
+
         return 'blade';
     }
+
     private function bladeSetup(): void
     {
         if ($this->confirm('Publish Blade views so you can customise them?', false)) {
             $this->callSilently('vendor:publish', [
-                '--tag'   => 'laravel-passwordless-views',
+                '--tag' => 'laravel-passwordless-views',
                 '--force' => (bool) $this->option('force'),
             ]);
             $this->components->twoColumnDetail('<fg=green>Published</>', 'resources/views/vendor/laravel-passwordless/');
@@ -146,6 +161,7 @@ class InstallCommand extends Command
             );
         }
     }
+
     private function inertiaSetup(string $framework, string $authType): void
     {
         $this->components->twoColumnDetail('<fg=cyan>Framework</>', $framework);
@@ -158,15 +174,16 @@ class InstallCommand extends Command
             $this->publishInertiaStubs($framework, $authType);
         }
     }
+
     private function publishInertiaStubs(string $framework, string $authType): void
     {
-        $ext       = $this->frameworks[$framework]['ext'];
-        $stubDir   = __DIR__.'/../../stubs/inertia/'.$framework;
+        $ext = $this->frameworks[$framework]['ext'];
+        $stubDir = __DIR__.'/../../stubs/inertia/'.$framework;
         $outputDir = resource_path('js/Pages/Auth');
-        $force     = (bool) $this->option('force');
+        $force = (bool) $this->option('force');
         File::ensureDirectoryExists($outputDir);
         foreach ($this->resolveComponents($authType) as $component) {
-            $src  = "{$stubDir}/{$component}.{$ext}";
+            $src = "{$stubDir}/{$component}.{$ext}";
             $dest = "{$outputDir}/{$component}.{$ext}";
             if (! file_exists($src)) {
                 continue;
@@ -176,23 +193,27 @@ class InstallCommand extends Command
                     '<fg=yellow>Skipped (exists)</>',
                     "resources/js/Pages/Auth/{$component}.{$ext} (use --force to overwrite)"
                 );
+
                 continue;
             }
             File::copy($src, $dest);
             $this->components->twoColumnDetail('<fg=green>Published</>', "resources/js/Pages/Auth/{$component}.{$ext}");
         }
     }
+
     /** @return array<string> */
     private function resolveComponents(string $authType): array
     {
         $magicLink = ['MagicLinkRequest', 'MagicLinkSent'];
         $loginCode = ['LoginCodeRequest', 'LoginCodeVerify'];
+
         return match ($authType) {
             'magic_link' => $magicLink,
             'login_code' => $loginCode,
-            default      => array_merge($magicLink, $loginCode),
+            default => array_merge($magicLink, $loginCode),
         };
     }
+
     private function writeEnvKey(string $key, string $value): void
     {
         $envPath = base_path('.env');
@@ -207,6 +228,7 @@ class InstallCommand extends Command
         }
         file_put_contents($envPath, $contents);
     }
+
     /** @return array<string> */
     private function detectFromPackageJson(): array
     {
@@ -215,23 +237,32 @@ class InstallCommand extends Command
             return [];
         }
         /** @var array<string, mixed> $json */
-        $json    = json_decode((string) file_get_contents($path), true);
+        $json = json_decode((string) file_get_contents($path), true);
         $allDeps = array_merge(
             (array) ($json['dependencies'] ?? []),
             (array) ($json['devDependencies'] ?? [])
         );
         $found = [];
-        if (isset($allDeps['vue']))    { $found[] = 'vue'; }
-        if (isset($allDeps['react']))  { $found[] = 'react'; }
-        if (isset($allDeps['svelte'])) { $found[] = 'svelte'; }
+        if (isset($allDeps['vue'])) {
+            $found[] = 'vue';
+        }
+        if (isset($allDeps['react'])) {
+            $found[] = 'react';
+        }
+        if (isset($allDeps['svelte'])) {
+            $found[] = 'svelte';
+        }
+
         return $found;
     }
+
     // -------------------------------------------------------------------------
     private function stepHeading(string $number, string $title): void
     {
         $this->line("  <fg=cyan;options=bold>-- Step {$number}: {$title}</>");
         $this->newLine();
     }
+
     private function displayHeader(): void
     {
         $this->newLine();
@@ -241,6 +272,7 @@ class InstallCommand extends Command
         $this->line('  <fg=gray>Press Enter to accept the default shown in parentheses.</>');
         $this->newLine();
     }
+
     private function displayModelReminder(): void
     {
         $this->components->warn('Add the HasPasswordlessAuth trait to your User model:');
@@ -253,6 +285,7 @@ class InstallCommand extends Command
         $this->line('  }');
         $this->newLine();
     }
+
     private function displayRoutes(string $authType): void
     {
         $prefix = config('passwordless.routes.prefix', 'auth');
@@ -272,6 +305,7 @@ class InstallCommand extends Command
             $this->newLine();
         }
     }
+
     private function displayDone(): void
     {
         $this->line('  <fg=green;options=bold>All done! Laravel Passwordless is ready.</>');

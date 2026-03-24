@@ -1,16 +1,20 @@
 <?php
+
 namespace Torqie\LaravelPasswordless\Http\Controllers;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
 use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
 use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
 use Torqie\LaravelPasswordless\Events\MagicLinkSent;
 use Torqie\LaravelPasswordless\Notifications\MagicLinkNotification;
+
 class MagicLinkController extends Controller
 {
     /**
@@ -24,11 +28,14 @@ class MagicLinkController extends Controller
         if (config('passwordless.inertia')) {
             /** @var string $component */
             $component = config('passwordless.components.magic_link_request', 'Auth/MagicLinkRequest');
-            return \Inertia\Inertia::render($component);
+
+            return Inertia::render($component);
         }
         $view = config('passwordless.views.magic_link_request') ?? 'laravel-passwordless::magic-link.request';
+
         return view($view);
     }
+
     /**
      * POST /auth/magic-link
      */
@@ -46,11 +53,14 @@ class MagicLinkController extends Controller
         if (config('passwordless.inertia')) {
             /** @var string $component */
             $component = config('passwordless.components.magic_link_sent', 'Auth/MagicLinkSent');
-            return \Inertia\Inertia::render($component);
+
+            return Inertia::render($component);
         }
         $view = config('passwordless.views.magic_link_sent') ?? 'laravel-passwordless::magic-link.sent';
+
         return view($view);
     }
+
     /**
      * GET /auth/magic-link/{token}
      * Signature validation is handled by the `passwordless.signed` middleware.

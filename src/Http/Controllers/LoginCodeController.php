@@ -1,16 +1,20 @@
 <?php
+
 namespace Torqie\LaravelPasswordless\Http\Controllers;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
 use Torqie\LaravelPasswordless\Events\LoginCodeSent;
 use Torqie\LaravelPasswordless\Notifications\LoginCodeNotification;
+
 class LoginCodeController extends Controller
 {
     /**
@@ -25,11 +29,14 @@ class LoginCodeController extends Controller
         if (config('passwordless.inertia')) {
             /** @var string $component */
             $component = config('passwordless.components.login_code_request', 'Auth/LoginCodeRequest');
-            return \Inertia\Inertia::render($component);
+
+            return Inertia::render($component);
         }
         $view = config('passwordless.views.login_code_request') ?? 'laravel-passwordless::login-code.request';
+
         return view($view);
     }
+
     /**
      * POST /auth/code
      * Send the one-time code to the provided email address.
@@ -49,8 +56,10 @@ class LoginCodeController extends Controller
         }
         // Store the email in session so the verify form knows whose code to check
         $request->session()->put('passwordless.pending_email', $request->input('email'));
+
         return redirect()->route('passwordless.login-code.verify');
     }
+
     /**
      * GET /auth/code/verify
      * Show the code entry form.
@@ -68,11 +77,14 @@ class LoginCodeController extends Controller
         if (config('passwordless.inertia')) {
             /** @var string $component */
             $component = config('passwordless.components.login_code_verify', 'Auth/LoginCodeVerify');
-            return \Inertia\Inertia::render($component, ['email' => $email]);
+
+            return Inertia::render($component, ['email' => $email]);
         }
         $view = config('passwordless.views.login_code_verify') ?? 'laravel-passwordless::login-code.verify';
+
         return view($view, ['email' => $email]);
     }
+
     /**
      * POST /auth/code/verify
      * Verify the submitted code and authenticate the user.
@@ -90,6 +102,7 @@ class LoginCodeController extends Controller
         $response = $action->authenticate($email, (string) $request->input('code'));
         // Clear the pending email from session on success
         $request->session()->forget('passwordless.pending_email');
+
         return $response;
     }
 }
