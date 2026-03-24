@@ -3,7 +3,7 @@ parameters:
 		-
 			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
 			identifier: larastan.noEnvCallsOutsideOfConfig
-			count: 12
+			count: 13
 			path: config/passwordless.php
 
 		-
@@ -17,4 +17,40 @@ parameters:
 			identifier: trait.unused
 			count: 1
 			path: src/Traits/HasPasswordlessAuth.php
+
+		-
+			message: '#^Method Torqie\\LaravelPasswordless\\Http\\Controllers\\LoginCodeController::request\(\) has invalid return type Inertia\\Response\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Controllers/LoginCodeController.php
+
+		-
+			message: '#^Call to static method render\(\) on an unknown class Inertia\\Inertia\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/Http/Controllers/LoginCodeController.php
+
+		-
+			message: '#^Method Torqie\\LaravelPasswordless\\Http\\Controllers\\LoginCodeController::verify\(\) has invalid return type Inertia\\Response\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Controllers/LoginCodeController.php
+
+		-
+			message: '#^Method Torqie\\LaravelPasswordless\\Http\\Controllers\\MagicLinkController::request\(\) has invalid return type Inertia\\Response\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Controllers/MagicLinkController.php
+
+		-
+			message: '#^Call to static method render\(\) on an unknown class Inertia\\Inertia\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/Http/Controllers/MagicLinkController.php
+
+		-
+			message: '#^Method Torqie\\LaravelPasswordless\\Http\\Controllers\\MagicLinkController::send\(\) has invalid return type Inertia\\Response\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Http/Controllers/MagicLinkController.php
 

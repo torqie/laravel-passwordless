@@ -112,6 +112,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Inertia
+    |--------------------------------------------------------------------------
+    | Set 'inertia' to true if your app uses Inertia.js. Define the component
+    | names below — these will be passed to Inertia::render() instead of
+    | returning a Blade view. The 'components' values take precedence over
+    | 'views' when Inertia is enabled.
+    */
+    'inertia' => env('PASSWORDLESS_INERTIA', false),
+
+    'components' => [
+        'magic_link_request' => null, // e.g. 'Auth/MagicLinkRequest'
+        'magic_link_sent' => null,    // e.g. 'Auth/MagicLinkSent'
+        'login_code_request' => null, // e.g. 'Auth/LoginCodeRequest'
+        'login_code_verify' => null,  // e.g. 'Auth/LoginCodeVerify'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Action Bindings
     |--------------------------------------------------------------------------
     | Swap any action with your own implementation by pointing to a class
