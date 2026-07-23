@@ -44,7 +44,6 @@ LaravelPasswordless::for($user)->sendLoginCode();
 
 - PHP 8.4+
 - Laravel 11+
-- Installation
 
 ## [1.0.0] - 2026-03-21
 
