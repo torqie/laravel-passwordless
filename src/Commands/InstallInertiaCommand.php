@@ -42,8 +42,8 @@ class InstallInertiaCommand extends Command
     {
         // 1. Explicit flag
         $flag = $this->option('framework');
-        if ($flag !== null) {
-            $flag = strtolower((string) $flag);
+        if (is_string($flag)) {
+            $flag = strtolower($flag);
             if (array_key_exists($flag, $this->extensions)) {
                 return $flag;
             }

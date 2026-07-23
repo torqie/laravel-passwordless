@@ -3,7 +3,9 @@ includes:
 
 parameters:
     level: 8
-    phpVersion: 80400
+    phpVersion:
+        min: 80300
+        max: 80400
     parallel:
         maximumNumberOfProcesses: 1
     paths:

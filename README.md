@@ -18,8 +18,8 @@ Passwordless authentication for Laravel via **magic links** and **login codes** 
 
 | Dependency | Version |
 |---|---|
-| PHP | 8.4+ |
-| Laravel | 11 or 12 |
+| PHP | 8.3+ |
+| Laravel | 12.61.1+ or 13.12.0+ |
 
 ---
 
