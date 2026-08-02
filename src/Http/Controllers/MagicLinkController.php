@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
-use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
-use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
-use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
+use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
+use Torqie\LaravelPasswordless\Contracts\GeneratesMagicLink;
+use Torqie\LaravelPasswordless\Contracts\ResolvesUserForSend;
 use Torqie\LaravelPasswordless\Events\MagicLinkSent;
 use Torqie\LaravelPasswordless\Notifications\MagicLinkNotification;
 
@@ -39,7 +39,7 @@ class MagicLinkController extends Controller
     /**
      * POST /auth/magic-link
      */
-    public function send(Request $request, GenerateMagicLinkAction $action, ResolveUserForSendAction $resolver): View|InertiaResponse|RedirectResponse
+    public function send(Request $request, GeneratesMagicLink $action, ResolvesUserForSend $resolver): View|InertiaResponse|RedirectResponse
     {
         $request->validate(['email' => ['required', 'email']]);
         $user = $resolver->handle((string) $request->input('email'), (string) $request->ip());
@@ -68,7 +68,7 @@ class MagicLinkController extends Controller
     public function authenticate(
         Request $request,
         string $token,
-        AuthenticateViaMagicLinkAction $action
+        AuthenticatesViaMagicLink $action
     ): RedirectResponse {
         return $action->authenticate($token);
     }
