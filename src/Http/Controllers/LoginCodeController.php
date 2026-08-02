@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
-use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
-use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
-use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
+use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
+use Torqie\LaravelPasswordless\Contracts\GeneratesLoginCode;
+use Torqie\LaravelPasswordless\Contracts\ResolvesUserForSend;
 use Torqie\LaravelPasswordless\Events\LoginCodeSent;
 use Torqie\LaravelPasswordless\Notifications\LoginCodeNotification;
 
@@ -41,7 +41,7 @@ class LoginCodeController extends Controller
      * POST /auth/code
      * Send the one-time code to the provided email address.
      */
-    public function send(Request $request, GenerateLoginCodeAction $action, ResolveUserForSendAction $resolver): RedirectResponse
+    public function send(Request $request, GeneratesLoginCode $action, ResolvesUserForSend $resolver): RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'email'],
@@ -89,7 +89,7 @@ class LoginCodeController extends Controller
      * POST /auth/code/verify
      * Verify the submitted code and authenticate the user.
      */
-    public function authenticate(Request $request, AuthenticateViaLoginCodeAction $action): RedirectResponse
+    public function authenticate(Request $request, AuthenticatesViaLoginCode $action): RedirectResponse
     {
         $request->validate([
             'code' => ['required', 'string'],
