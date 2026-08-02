@@ -5,6 +5,22 @@ All notable changes to `laravel-passwordless` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-08-02
+
+### Fixed
+
+- `config('passwordless.actions.*')` now actually applies to the HTTP flow. Both controllers type-hinted the concrete action classes in their method signatures, so the container returned the default implementation and the configured class was bypassed — the bindings only ever took effect through the facade. The controllers now type-hint the contracts (`GeneratesMagicLink`, `AuthenticatesViaMagicLink`, `GeneratesLoginCode`, `AuthenticatesViaLoginCode`).
+
+### Added
+
+- `Torqie\LaravelPasswordless\Contracts\ResolvesUserForSend` — `handle(string $email, string $ip): ?Authenticatable`. `ResolveUserForSendAction` now implements it, and the controllers type-hint the contract.
+- `actions.resolve_user` config key, bound in the service provider alongside the other four. This is the extension point for deciding what happens when the submitted email has no account: the default returns `null` (the flow stays silent to prevent user-enumeration), and an override can register the address instead, which makes passwordless sign-up possible without patching the package. Call `parent::handle()` from a subclass to keep the send rate limiting.
+- Controller-level tests that swap each of the five contracts via config and assert the replacement runs through a real HTTP request.
+
+### Upgrade notes
+
+Nothing to change if you use the defaults. If you worked around the bug by binding the **concrete** action classes in your own service provider, switch to the `actions.*` config keys — those container bindings still work, but they are no longer needed.
+
 ## Initial Release - 2026-03-23
 
 ### 🎉 Initial Release
@@ -44,7 +60,6 @@ LaravelPasswordless::for($user)->sendLoginCode();
 
 - PHP 8.4+
 - Laravel 11+
-- Installation
 
 ## [1.0.0] - 2026-03-21
 

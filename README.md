@@ -18,8 +18,8 @@ Passwordless authentication for Laravel via **magic links** and **login codes** 
 
 | Dependency | Version |
 |---|---|
-| PHP | 8.4+ |
-| Laravel | 11 or 12 |
+| PHP | 8.3+ |
+| Laravel | 12.61.1+ or 13.12.0+ |
 
 ---
 
@@ -86,6 +86,8 @@ php artisan vendor:publish --tag="laravel-passwordless-views"
 # Scaffold Inertia components for a specific framework (optional)
 php artisan passwordless:install-inertia --framework=vue
 ```
+
+> **Note:** publishing migrations gives you two files. `create_passwordless_table` is required. `make_password_nullable_on_users_table` only matters if your `users` table already has a `password` column — it is guarded by `Schema::hasColumn`, so on a passwordless-first app it is a no-op you can safely delete before migrating.
 
 ---
 
@@ -448,8 +450,17 @@ Swap any action class with your own implementation. Your class must implement th
     'authenticate_magic_link' => \Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction::class,
     'generate_login_code'     => \Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction::class,
     'authenticate_login_code' => \Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction::class,
+    'resolve_user'            => \Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction::class,
 ],
 ```
+
+| Config key | Contract | Default |
+|---|---|---|
+| `generate_magic_link` | `GeneratesMagicLink` | `GenerateMagicLinkAction` |
+| `authenticate_magic_link` | `AuthenticatesViaMagicLink` | `AuthenticateViaMagicLinkAction` |
+| `generate_login_code` | `GeneratesLoginCode` | `GenerateLoginCodeAction` |
+| `authenticate_login_code` | `AuthenticatesViaLoginCode` | `AuthenticateViaLoginCodeAction` |
+| `resolve_user` | `ResolvesUserForSend` | `ResolveUserForSendAction` |
 
 ---
 
@@ -478,6 +489,57 @@ class MyGenerateMagicLinkAction implements GeneratesMagicLink
     'generate_magic_link' => \App\Auth\MyGenerateMagicLinkAction::class,
 ],
 ```
+
+The controllers resolve every action through its contract, so the config key is all you need — no service provider bindings.
+
+### Passwordless sign-up (customising `resolve_user`)
+
+`ResolveUserForSendAction` decides who receives a token when someone submits the send form. It throttles the request, then returns the matching user — or `null` when the email is unknown, in which case the flow stays silent to avoid leaking which addresses have accounts.
+
+Override it to register unknown emails instead. Call `parent::handle()` first so the send rate limit still applies:
+
+```php
+namespace App\Auth;
+
+use Illuminate\Contracts\Auth\Authenticatable;
+use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
+use App\Models\User;
+
+class RegisterOnSendResolver extends ResolveUserForSendAction
+{
+    public function handle(string $email, string $ip): ?Authenticatable
+    {
+        // Keeps the send throttling from the parent action.
+        if ($user = parent::handle($email, $ip)) {
+            return $user;
+        }
+
+        return User::create(['email' => $email]);
+    }
+}
+```
+
+```php
+'actions' => [
+    'resolve_user' => \App\Auth\RegisterOnSendResolver::class,
+],
+```
+
+The new account starts nameless and unverified — clicking the magic link (or entering the code) is the verification. Finish the sign-up on the `UserAuthenticatedPasswordlessly` event:
+
+```php
+use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
+
+class MarkEmailVerified
+{
+    public function handle(UserAuthenticatedPasswordlessly $event): void
+    {
+        $event->authenticatable->forceFill(['email_verified_at' => now()])->save();
+    }
+}
+```
+
+Writing a resolver from scratch instead of subclassing? Implement `Torqie\LaravelPasswordless\Contracts\ResolvesUserForSend` — but bring your own throttling, since that lives in the default action.
 
 ### Listening to events
 
@@ -593,7 +655,7 @@ Schedule::command('passwordless:purge')->daily();
 composer test
 ```
 
-The package ships with a full Pest test suite — 102 tests covering models, actions, controllers, notifications, events, the fluent API, and the purge command.
+The package ships with a full Pest test suite — 111 tests covering models, actions, controllers, notifications, events, config-driven action swapping, the fluent API, and the purge command.
 
 ---
 
