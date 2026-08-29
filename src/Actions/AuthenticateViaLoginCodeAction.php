@@ -10,9 +10,14 @@ use Illuminate\Validation\ValidationException;
 use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
 use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
 use Torqie\LaravelPasswordless\Models\PasswordlessToken;
+use Torqie\LaravelPasswordless\Support\TokenGenerator;
 
 class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
 {
+    public function __construct(
+        private readonly TokenGenerator $tokenGenerator = new TokenGenerator,
+    ) {}
+
     /**
      * @throws ValidationException
      */
@@ -42,17 +47,21 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
             ]);
         }
 
-        $hashedCode = hash('sha256', $code);
-
-        // Fetch all valid login-code tokens for this user, then compare
-        // hashes in constant time to prevent timing side-channels.
+        // Fetch all valid login-code tokens for this user, then compare hashes in
+        // constant time to prevent timing side-channels. Each row is hashed with
+        // its own salt; rows written before the salt column existed carry a null
+        // salt and still compare against the original unsalted digest, so
+        // upgrading does not invalidate codes already in flight.
         /** @var PasswordlessToken|null $token */
         $token = PasswordlessToken::ofType('login_code')
             ->valid()
             ->where('authenticatable_type', $user->getMorphClass())
             ->where('authenticatable_id', $user->getAuthIdentifier())
             ->get()
-            ->first(fn (PasswordlessToken $t) => hash_equals($t->token, $hashedCode));
+            ->first(fn (PasswordlessToken $t) => hash_equals(
+                $t->token,
+                $this->tokenGenerator->hash($code, $t->salt)
+            ));
 
         if ($token === null) {
             RateLimiter::hit($rateLimitKey, $decaySeconds);
@@ -64,7 +73,7 @@ class AuthenticateViaLoginCodeAction implements AuthenticatesViaLoginCode
 
         RateLimiter::clear($rateLimitKey);
 
-        $token->markUsed();
+        $token->consume();
 
         $remember = (bool) config('passwordless.remember', false);
         Auth::guard((string) config('passwordless.guard', 'web'))->login($user, $remember);

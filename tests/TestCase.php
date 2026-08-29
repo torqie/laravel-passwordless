@@ -82,6 +82,10 @@ class TestCase extends Orchestra
         /** @var Migration $migration */
         $migration = include __DIR__.'/../database/migrations/create_passwordless_table.php.stub';
         $migration->up();
+
+        /** @var Migration $saltMigration */
+        $saltMigration = include __DIR__.'/../database/migrations/add_salt_to_passwordless_table.php.stub';
+        $saltMigration->up();
     }
 
     private function setUpWebMiddleware(): void

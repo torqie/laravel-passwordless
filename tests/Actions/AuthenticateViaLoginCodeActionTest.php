@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
+use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
 use Torqie\LaravelPasswordless\Events\UserAuthenticatedPasswordlessly;
 use Torqie\LaravelPasswordless\Models\PasswordlessToken;
 use Torqie\LaravelPasswordless\Tests\Models\User;
@@ -110,7 +111,10 @@ it('marks the token as used after a successful authentication', function () {
 
     $this->action->authenticate('test@example.com', $plain);
 
-    expect($token->fresh()->used_at)->not->toBeNull();
+    // A consumed login code deletes itself rather than lingering as used —
+    // single-use is enforced by its absence, and the row is collision surface.
+    expect($token->fresh())->toBeNull();
+    expect(PasswordlessToken::count())->toBe(0);
 });
 
 it('clears the rate limit counter on success', function () {
@@ -150,4 +154,32 @@ it('fires the UserAuthenticatedPasswordlessly event with type login_code', funct
         return $event->type === 'login_code'
             && $event->authenticatable->id === $this->user->id;
     });
+});
+
+it('still accepts a pre-salt code so upgrading does not lock anyone out', function () {
+    // Rows written before the salt column existed carry a null salt and the
+    // original unsalted digest. Verification must keep accepting them.
+    $plain = '654321';
+
+    PasswordlessToken::create([
+        'authenticatable_type' => $this->user->getMorphClass(),
+        'authenticatable_id' => $this->user->getAuthIdentifier(),
+        'token' => hash('sha256', $plain),
+        'salt' => null,
+        'type' => 'login_code',
+        'expires_at' => now()->addMinutes(15),
+    ]);
+
+    $this->action->authenticate('test@example.com', $plain);
+
+    expect(auth()->check())->toBeTrue();
+    expect(PasswordlessToken::count())->toBe(0);
+});
+
+it('does not accept another user\'s code', function () {
+    $other = User::create(['name' => 'Other', 'email' => 'other-verify@example.com']);
+    $code = app(GenerateLoginCodeAction::class)->generate($other);
+
+    expect(fn () => $this->action->authenticate('test@example.com', $code))
+        ->toThrow(ValidationException::class);
 });

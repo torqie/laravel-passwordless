@@ -645,6 +645,9 @@ Schedule it in `routes/console.php`:
 
 ```php
 Schedule::command('passwordless:purge')->daily();
+
+// Or keep a retention window rather than purging everything spent:
+Schedule::command('passwordless:purge --days=7')->daily();
 ```
 
 ---

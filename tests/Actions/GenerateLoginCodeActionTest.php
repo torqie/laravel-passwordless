@@ -25,12 +25,62 @@ it('returns the plain-text code directly', function () {
     expect($code)->toBeString()->not->toBeEmpty();
 });
 
-it('stores a SHA-256 hash of the code, not the plain text', function () {
+it('stores a salted SHA-256 hash of the code, not the plain text', function () {
     $code = $this->action->generate($this->user);
     $token = PasswordlessToken::first();
 
-    expect($token->token)->toBe(hash('sha256', $code));
+    expect($token->salt)->not->toBeNull();
+    expect($token->token)->toBe(hash('sha256', $token->salt.$code));
     expect($token->token)->not->toBe($code);
+    // The whole point: the unsalted digest must NOT be what is stored.
+    expect($token->token)->not->toBe(hash('sha256', $code));
+});
+
+it('gives each generated code a distinct salt', function () {
+    $this->action->generate($this->user);
+    $first = PasswordlessToken::first()->salt;
+
+    $this->action->generate($this->user);
+    $second = PasswordlessToken::first()->salt;
+
+    expect($second)->not->toBe($first);
+});
+
+it('stores the same code under different digests for different users', function () {
+    // Two users holding the identical code must not produce the same row value,
+    // which is what used to risk a unique-index collision.
+    $other = User::create(['name' => 'Other', 'email' => 'other@example.com']);
+
+    $this->action->generate($this->user);
+    $a = PasswordlessToken::where('authenticatable_id', $this->user->id)->first();
+
+    $this->action->generate($other);
+    $b = PasswordlessToken::where('authenticatable_id', $other->id)->first();
+
+    expect($a->token)->not->toBe($b->token);
+    expect($a->salt)->not->toBe($b->salt);
+});
+
+it('deletes the user\'s spent codes instead of letting them accumulate', function () {
+    $this->action->generate($this->user);
+    $this->action->generate($this->user);
+    $this->action->generate($this->user);
+
+    // Each generate revokes the previous code and then clears it out, so exactly
+    // one row survives per user rather than one per login attempt ever made.
+    expect(PasswordlessToken::count())->toBe(1);
+    expect(PasswordlessToken::first()->used_at)->toBeNull();
+});
+
+it('leaves other users\' codes alone when pruning', function () {
+    $other = User::create(['name' => 'Other', 'email' => 'other2@example.com']);
+    $this->action->generate($other);
+
+    $this->action->generate($this->user);
+    $this->action->generate($this->user);
+
+    expect(PasswordlessToken::count())->toBe(2);
+    expect(PasswordlessToken::where('authenticatable_id', $other->id)->count())->toBe(1);
 });
 
 it('generates a code with the configured length', function () {
