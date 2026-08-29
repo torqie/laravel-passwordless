@@ -7,36 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Security
-
-- **Login codes are now salted.** They were stored as an unsalted `sha256($code)`. With the default 6-digit numeric charset that is a 1,000,000-value keyspace, so a database dump could be reversed by exhausting it in milliseconds. Each code now gets its own 32-hex-character random salt, stored in a new nullable `salt` column and hashed as `sha256($salt.$code)`.
-
-  Magic links deliberately keep the unsalted digest. They are looked up **by** hash, so a random per-row salt would make the row unfindable — and at 64 random characters there is nothing to exhaust. Salting protects low-entropy secrets; only the code is one.
-
-### Fixed
-
-- **Login codes could collide on the unique `token` index.** With an unsalted digest over a 1,000,000-value keyspace, and used/expired rows retained until `passwordless:purge` ran, a newly generated code whose digest already existed anywhere in the table raised an unhandled `QueryException` — surfacing to the user as a failed login. Birthday odds reached roughly even at ~1,200 retained rows. Salting makes a collision astronomically unlikely, and the retention changes below keep the table small regardless.
-
-### Changed
-
-- **Consumed login codes now delete themselves** rather than being marked `used_at`. A consumed code has no remaining function — single-use is enforced just as well by the row's absence — and every retained row was collision surface. The user-facing failure message is unchanged and identical either way ("The code is incorrect or has expired"), so no diagnostic signal is lost; a successful login is still reported by `UserAuthenticatedPasswordlessly`.
-
-  Magic links continue to mark `used_at`. Retention is free there, and it stays useful for spotting an email scanner or link prefetcher that consumed a link before the human clicked it.
-
-  New `PasswordlessToken::consume()` carries this policy, so a custom `AuthenticatesViaLoginCode` implementation gets it by calling `consume()` instead of `markUsed()`.
-
-- **Generating a code now clears that user's spent codes** for the same type, so the table holds about one row per user rather than one per login attempt ever made. Other users' rows are untouched.
-
-- `passwordless:purge` gained `--days=` to keep a retention window (`passwordless:purge --days=7`).
-
-### Added
-
-- Migration `add_salt_to_passwordless_table` adding the nullable `salt` column. **Consumers must run `php artisan migrate` when upgrading.**
-
-### Upgrade notes
-
-Run `php artisan migrate`. Codes already in flight keep working — rows with a null `salt` still verify against the original unsalted digest, so nobody is locked out mid-login. Scheduling `passwordless:purge` is still worthwhile, but is no longer load-bearing for correctness.
-
 ## [2.1.0] - 2026-08-02
 
 ### Fixed
