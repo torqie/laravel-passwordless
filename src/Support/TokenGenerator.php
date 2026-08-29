@@ -46,10 +46,26 @@ class TokenGenerator
     }
 
     /**
-     * Hash a plain-text value using SHA-256.
+     * Generate a random salt for a low-entropy secret.
+     *
+     * Login codes are short and drawn from a small charset, so an unsalted digest
+     * is both brute-forceable from a database dump and prone to colliding on the
+     * unique index. A per-row salt fixes both.
      */
-    public function hash(string $value): string
+    public function makeSalt(): string
     {
-        return hash('sha256', $value);
+        return bin2hex(random_bytes(16));
+    }
+
+    /**
+     * Hash a plain-text value using SHA-256, optionally salted.
+     *
+     * Passing null reproduces the original unsalted digest, which is what magic
+     * links use (they are looked up BY hash, so they cannot carry a random salt)
+     * and what pre-salt rows in the database still contain.
+     */
+    public function hash(string $value, ?string $salt = null): string
+    {
+        return hash('sha256', ($salt ?? '').$value);
     }
 }

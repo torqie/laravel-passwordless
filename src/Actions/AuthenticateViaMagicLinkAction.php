@@ -34,7 +34,7 @@ class AuthenticateViaMagicLinkAction implements AuthenticatesViaMagicLink
                 ->withErrors(['token' => 'This magic link is invalid or has expired.']);
         }
 
-        $passwordlessToken->markUsed();
+        $passwordlessToken->consume();
 
         $remember = (bool) config('passwordless.remember', false);
         Auth::guard((string) config('passwordless.guard', 'web'))->login($authenticatable, $remember);
