@@ -9,6 +9,7 @@ use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
 use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
 use Torqie\LaravelPasswordless\Commands\InstallCommand;
 use Torqie\LaravelPasswordless\Commands\InstallInertiaCommand;
 use Torqie\LaravelPasswordless\Commands\PurgePasswordlessTokensCommand;
@@ -16,6 +17,7 @@ use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaLoginCode;
 use Torqie\LaravelPasswordless\Contracts\AuthenticatesViaMagicLink;
 use Torqie\LaravelPasswordless\Contracts\GeneratesLoginCode;
 use Torqie\LaravelPasswordless\Contracts\GeneratesMagicLink;
+use Torqie\LaravelPasswordless\Contracts\ResolvesUserForSend;
 use Torqie\LaravelPasswordless\Http\Middleware\EnsurePasswordlessTokenIsValid;
 
 class LaravelPasswordlessServiceProvider extends PackageServiceProvider
@@ -63,6 +65,13 @@ class LaravelPasswordlessServiceProvider extends PackageServiceProvider
         $this->app->bind(AuthenticatesViaLoginCode::class, function ($app) {
             /** @var class-string<AuthenticatesViaLoginCode> $class */
             $class = config('passwordless.actions.authenticate_login_code', AuthenticateViaLoginCodeAction::class);
+
+            return $app->make($class);
+        });
+
+        $this->app->bind(ResolvesUserForSend::class, function ($app) {
+            /** @var class-string<ResolvesUserForSend> $class */
+            $class = config('passwordless.actions.resolve_user', ResolveUserForSendAction::class);
 
             return $app->make($class);
         });

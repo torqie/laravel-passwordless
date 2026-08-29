@@ -5,6 +5,7 @@ use Torqie\LaravelPasswordless\Actions\AuthenticateViaLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\AuthenticateViaMagicLinkAction;
 use Torqie\LaravelPasswordless\Actions\GenerateLoginCodeAction;
 use Torqie\LaravelPasswordless\Actions\GenerateMagicLinkAction;
+use Torqie\LaravelPasswordless\Actions\ResolveUserForSendAction;
 
 // config for Torqie/LaravelPasswordless
 return [
@@ -134,12 +135,19 @@ return [
     |--------------------------------------------------------------------------
     | Swap any action with your own implementation by pointing to a class
     | that implements the corresponding contract.
+    |
+    | 'resolve_user' decides who receives a token when someone submits the
+    | send form. The default throttles the request and returns the matching
+    | user, or null when the email is unknown (the flow then stays silent to
+    | avoid user-enumeration). Point this at your own ResolvesUserForSend
+    | implementation to change that — e.g. to register a new account instead.
     */
     'actions' => [
         'generate_magic_link' => GenerateMagicLinkAction::class,
         'authenticate_magic_link' => AuthenticateViaMagicLinkAction::class,
         'generate_login_code' => GenerateLoginCodeAction::class,
         'authenticate_login_code' => AuthenticateViaLoginCodeAction::class,
+        'resolve_user' => ResolveUserForSendAction::class,
     ],
 
 ];
